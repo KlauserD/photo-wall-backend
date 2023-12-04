@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "employee_photo_collections",
+  "info": {
+    "singularName": "employee-photo-collection",
+    "pluralName": "employee-photo-collections",
+    "displayName": "EmployeePhotoCollection",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "pictures": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "name": {
+      "type": "string"
+    }
+  }
+}

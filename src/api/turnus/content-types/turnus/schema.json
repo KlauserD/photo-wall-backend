@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "turnuses",
+  "info": {
+    "singularName": "turnus",
+    "pluralName": "turnuses",
+    "displayName": "Turnus",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "year": {
+      "type": "integer"
+    },
+    "month": {
+      "type": "integer"
+    },
+    "pictures": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}

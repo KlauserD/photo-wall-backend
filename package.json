@@ -1,0 +1,32 @@
+{
+  "name": "photo-wall-backend",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A Strapi application",
+  "scripts": {
+    "develop": "strapi develop",
+    "start": "strapi start",
+	"start:win": "cross-env NODE_ENV=production npm start",
+    "build": "strapi build",
+	"build:win": "cross-env NODE_ENV=production npm run build",
+    "strapi": "strapi"
+  },
+  "dependencies": {
+    "@strapi/plugin-i18n": "4.9.0",
+    "@strapi/plugin-users-permissions": "4.9.0",
+    "@strapi/strapi": "4.9.0",
+    "better-sqlite3": "8.0.1",
+    "cross-env": "^7.0.3"
+  },
+  "author": {
+    "name": "A Strapi developer"
+  },
+  "strapi": {
+    "uuid": "d484fe72-2bf8-45a7-aa46-6dc60979eecc"
+  },
+  "engines": {
+    "node": ">=14.19.1 <=18.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}

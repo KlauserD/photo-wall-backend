@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "qualifications",
+  "info": {
+    "singularName": "qualification",
+    "pluralName": "qualifications",
+    "displayName": "Qualification"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    }
+  }
+}

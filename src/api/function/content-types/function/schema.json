@@ -1,0 +1,45 @@
+{
+  "kind": "collectionType",
+  "collectionName": "functions",
+  "info": {
+    "singularName": "function",
+    "pluralName": "functions",
+    "displayName": "Function",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "employee": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::employee.employee",
+      "inversedBy": "functions"
+    },
+    "substitution": {
+      "type": "boolean"
+    },
+    "subfunctions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::function.function",
+      "mappedBy": "superfunction"
+    },
+    "superfunction": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::function.function",
+      "inversedBy": "subfunctions"
+    },
+    "employee_photo_collection": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::employee-photo-collection.employee-photo-collection"
+    }
+  }
+}
