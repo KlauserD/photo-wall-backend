@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "photowall_pages",
+  "collectionName": "pdf_pages",
   "info": {
-    "singularName": "photowall-page",
-    "pluralName": "photowall-pages",
-    "displayName": "PhotowallPage",
+    "singularName": "pdf-page",
+    "pluralName": "pdf-pages",
+    "displayName": "PdfPage",
     "description": ""
   },
   "options": {
@@ -13,13 +13,12 @@
   "pluginOptions": {},
   "attributes": {
     "title": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
-    "pdfDocument": {
+    "document": {
       "type": "media",
       "multiple": false,
-      "required": true,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
@@ -27,8 +26,13 @@
         "audios"
       ]
     },
-    "showingTime": {
-      "type": "integer"
+    "totalShowingTime": {
+      "type": "integer",
+      "required": true
+    },
+    "turnOverTime": {
+      "type": "integer",
+      "required": true
     }
   }
 }

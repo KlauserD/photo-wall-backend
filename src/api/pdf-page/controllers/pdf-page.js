@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * zd-fsj controller
+ * pdf-page controller
  */
 
 const { createCoreController } = require('@strapi/strapi').factories;
 
-module.exports = createCoreController('api::zd-fsj.zd-fsj');
+module.exports = createCoreController('api::pdf-page.pdf-page');

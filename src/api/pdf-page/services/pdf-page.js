@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * zd-fsj service
+ * pdf-page service
  */
 
 const { createCoreService } = require('@strapi/strapi').factories;
 
-module.exports = createCoreService('api::zd-fsj.zd-fsj');
+module.exports = createCoreService('api::pdf-page.pdf-page');
