@@ -1,0 +1,18 @@
+{
+  "kind": "singleType",
+  "collectionName": "zd_fsj_showing_times",
+  "info": {
+    "singularName": "zd-fsj-showing-time",
+    "pluralName": "zd-fsj-showing-times",
+    "displayName": "ZdFsjShowingTime"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seconds": {
+      "type": "integer"
+    }
+  }
+}

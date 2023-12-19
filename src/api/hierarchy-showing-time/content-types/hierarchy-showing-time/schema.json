@@ -1,0 +1,19 @@
+{
+  "kind": "singleType",
+  "collectionName": "hierarchy_showing_times",
+  "info": {
+    "singularName": "hierarchy-showing-time",
+    "pluralName": "hierarchy-showing-times",
+    "displayName": "HierarchyShowingTime",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seconds": {
+      "type": "integer"
+    }
+  }
+}
