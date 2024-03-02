@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "refresh_times",
+  "info": {
+    "singularName": "refresh-time",
+    "pluralName": "refresh-times",
+    "displayName": "RefreshTime"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "timeOfDay": {
+      "type": "time"
+    }
+  }
+}
