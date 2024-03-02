@@ -12,7 +12,7 @@ module.exports = createCoreService('api::employee.employee', ({ strapi }) =>  ({
       // Calling the default core controller
         const employee = await super.findOne(entityId, params);
   
-        strapi.log.debug(JSON.stringify(employee));
+        //strapi.log.debug(JSON.stringify(employee));
 
         if(employee.mnr == null) {
           strapi.log.debug('No MNR has been set for ' + employee.name + '. No data fetching possible.');
@@ -27,13 +27,11 @@ module.exports = createCoreService('api::employee.employee', ({ strapi }) =>  ({
               },
             });
 
-            const imgBase64 = await strapi.config['nrk'].getPictureById(employee.mnr);
-            strapi.log.debug('base64 string: ' + imgBase64);
+            const picutreBlob = await strapi.config['nrk'].getPictureById(employee.mnr);
 
-            if(imgBase64 != null) {
-              const file = DataURIToBlob(imgBase64);
+            if(picutreBlob != null) {
               const form = new FormData();
-              form.append('files', file, empName + ".png");
+              form.append('files', picutreBlob, empName + ".png");
               form.append('ref', 'api::employee.employee');
               form.append('refId', employee.id);
               form.append('field', 'picture');

@@ -25,7 +25,7 @@ module.exports = {
 
         if (imgBase64 == null) return null;
 
-        return imgBase64;
+        return DataURIToBlob(imgBase64);
     }
 }
 
@@ -50,4 +50,16 @@ async function makeNrkRequest(params) {
             return null;
         }
     }
+}
+
+function DataURIToBlob(dataURI) {
+    const splitDataURI = dataURI.split(',')
+    const byteString = splitDataURI[0].indexOf('base64') >= 0 ? Buffer.from(splitDataURI[1], 'base64') : decodeURI(splitDataURI[1])
+    const mimeString = splitDataURI[0].split(':')[1].split(';')[0]
+
+    const ia = new Uint8Array(byteString.length)
+    for (let i = 0; i < byteString.length; i++)
+        ia[i] = byteString.charCodeAt(i)
+
+    return new Blob([ia], { type: mimeString })
 }
