@@ -11,12 +11,21 @@ module.exports = {
             'mnr': id
         });
 
-        if(data == null) return "_ _";
-
-        strapi.log.debug(JSON.stringify(data));
+        if(data == null) return null;
 
         const empName = data.Vorname + ' ' + data.Nachname
         return empName;
+    },
+
+    async getPictureById(id) {
+        const imgBase64 = await makeNrkRequest({
+            'req': 'MAPicture',
+            'mnr': id
+        });
+
+        if (imgBase64 == null) return null;
+
+        return imgBase64;
     }
 }
 
@@ -35,7 +44,7 @@ async function makeNrkRequest(params) {
 
     if(axiosResponse.status >= 200 && axiosResponse.status < 300) {
         if(axiosResponse.data.status === "OK") {
-            axiosResponse.data.data;
+            return axiosResponse.data.data;
         } else {
             strapi.log.error(axiosResponse.data.msg);
             return null;
