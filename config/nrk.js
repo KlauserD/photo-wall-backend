@@ -18,14 +18,20 @@ module.exports = {
     },
 
     async getPictureById(id) {
-        const imgBase64 = await makeNrkRequest({
+        const resultString = await makeNrkRequest({
             'req': 'MAPicture',
             'mnr': id
         });
 
-        if (imgBase64 == null) return null;
+        if (resultString == null) return null;
 
-        return DataURIToBlob(imgBase64);
+        const resultStringSplitted = resultString.split(',');
+
+        const mimeString = resultStringSplitted[0].split(':')[1].split(';')[0]
+        const imgBase64 = resultStringSplitted[1];
+
+        const buffer = Buffer.from(imgBase64, 'base64');
+        return new Blob(buffer, { type: mimeString });
     }
 }
 

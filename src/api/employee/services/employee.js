@@ -31,7 +31,7 @@ module.exports = createCoreService('api::employee.employee', ({ strapi }) =>  ({
 
             if(picutreBlob != null) {
               const form = new FormData();
-              form.append('files', picutreBlob, empName + ".png");
+              form.append('files', picutreBlob, empName + "." + picutreBlob.type.split('/')[1]);
               form.append('ref', 'api::employee.employee');
               form.append('refId', employee.id);
               form.append('field', 'picture');
