@@ -8,8 +8,17 @@
 const { createCoreService } = require('@strapi/strapi').factories;
 const axios = require('axios').default;
 
-async function updatePicture(employee, fileBlob, filename) {
+function removeUmlauts(str) {
+  return str.replace('/\u00dc/g', 'Ue')
+    .replace('/\u00fc/g', 'ue')
+    .replace('/\u00c4/g', 'Ae')
+    .replace('/\u00e4/g', 'ae')
+    .replace('/\u00d6/g', 'Oe')
+    .replace('/\u00f6/g', 'oe')
+    .replace('/\u00df/g', 'ss')
+}
 
+async function updatePicture(employee, fileBlob, filename) {
   // delete if api image is present
   if(employee.picture?.name == filename) {
     await axios.delete(
@@ -69,7 +78,7 @@ module.exports = createCoreService('api::employee.employee', ({ strapi }) =>  ({
             await updatePicture(
               strapiEmployee,
               pictureBlob,
-              'api_' + nrkEmp.name + "." + pictureBlob.type.split('/')[1]
+              'api_' + removeUmlauts(nrkEmp.name) + "." + pictureBlob.type.split('/')[1]
             );
           }
 
