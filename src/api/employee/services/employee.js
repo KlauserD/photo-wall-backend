@@ -6,44 +6,79 @@
  */
 
 const { createCoreService } = require('@strapi/strapi').factories;
+const axios = require('axios').default;
+
+async function updatePicture(employee, fileBlob, filename) {
+
+  // delete if api image is present
+  if(employee.picture?.name == filename) {
+    await axios.delete(
+      'http://127.0.0.1:1337/api/upload/files/' + employee.picture.id,
+      {
+        headers: {
+          "Authorization": 'Bearer ' + strapi.config['api'].uploadToken
+        }
+      }
+    );
+  }
+
+  const form = new FormData();
+  form.append('files', fileBlob, filename);
+  form.append('ref', 'api::employee.employee');
+  form.append('refId', employee.id); //employee.id);
+  form.append('field', 'picture');
+
+  try {
+    await axios.post(
+      'http://127.0.0.1:1337/api/upload', 
+      form,
+      {
+        headers: {
+          "Authorization": 'Bearer ' + strapi.config['api'].uploadToken,
+          "Content-Type": 'multipart/form-data'
+        }
+      });
+
+  } catch(e) {
+    strapi.log.error('upload fetch error: ' + e);
+  }
+}
 
 module.exports = createCoreService('api::employee.employee', ({ strapi }) =>  ({
     async findOne(entityId, params = {}) {  
       // Calling the default core controller
-        const employee = await super.findOne(entityId, params);
-  
-        //strapi.log.debug(JSON.stringify(employee));
+      let strapiEmployee = await super.findOne(entityId, params);
 
-        if(employee.mnr == null) {
-          strapi.log.debug('No MNR has been set for ' + employee.name + '. No data fetching possible.');
-        } else {
-          const empName = await strapi.config['nrk'].getNameById(employee.mnr);
-          strapi.log.debug('NRK emp name: ' + empName);
-          
-          if(empName != null) {
-            super.update(employee.id, {
-              data: {
-                name: empName,
-              },
-            });
+      if(strapiEmployee.mnr == null || strapiEmployee.mnr < 0) {
+        strapi.log.debug('No MNR has been set for ' + strapiEmployee.name + '. No data fetching possible.');
+      } else if((new Date() - new Date(strapiEmployee.updatedAt)) / 36e5 > 0) { // last updated longer than 24h ago
+        strapi.log.debug('Trying to update employee: ' + strapiEmployee.mnr);
+        
+        const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(strapiEmployee.mnr);
 
-            const picutreBlob = await strapi.config['nrk'].getPictureById(employee.mnr);
+        if(nrkEmp != null) {
+          await super.update(strapiEmployee.id, {
+            data: {
+              name: nrkEmp.name,
+            },
+          });
 
-            if(picutreBlob != null) {
-              const form = new FormData();
-              form.append('files', picutreBlob, empName + "." + picutreBlob.type.split('/')[1]);
-              form.append('ref', 'api::employee.employee');
-              form.append('refId', employee.id);
-              form.append('field', 'picture');
+          const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiEmployee.mnr);
 
-              await fetch('/api/upload', {
-                method: 'post',
-                body: form
-              });
-            }
+          if(pictureBlob != null) {
+            await updatePicture(
+              strapiEmployee,
+              pictureBlob,
+              'api_' + nrkEmp.name + "." + pictureBlob.type.split('/')[1]
+            );
           }
-        }
 
-        return employee;
+          strapiEmployee = await super.findOne(entityId, params);
+        }
+      }
+
+      return strapiEmployee;
     }
+
+
   }));

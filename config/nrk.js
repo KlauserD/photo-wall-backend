@@ -5,22 +5,25 @@ const environment = {
 };
 
 module.exports = {
-    async getNameById(id) {
+    async getEmployeeByMnr(mnr) {
         const data = await makeNrkRequest({
             'req': 'GetMAData',
-            'mnr': id
+            'mnr': mnr
         });
+
+        strapi.log.debug('nrk emp: ' + JSON.stringify(data));
 
         if(data == null) return null;
 
-        const empName = data.Vorname + ' ' + data.Nachname
-        return empName;
+        return {
+            name: data.Vorname + ' ' + data.Nachname,
+        };
     },
 
-    async getPictureById(id) {
+    async getPictureByMnr(mnr) {
         const resultString = await makeNrkRequest({
             'req': 'MAPicture',
-            'mnr': id
+            'mnr': mnr
         });
 
         if (resultString == null) return null;
@@ -31,7 +34,7 @@ module.exports = {
         const imgBase64 = resultStringSplitted[1];
 
         const buffer = Buffer.from(imgBase64, 'base64');
-        return new Blob(buffer, { type: mimeString });
+        return new Blob([buffer], { type: mimeString });
     }
 }
 
@@ -41,7 +44,7 @@ async function makeNrkRequest(params) {
     const axiosResponse = await axios.post(
         environment.nrkServer, 
         params, {
-            timeout: 5000,
+            timeout: 15000,
             headers: {
                 'NRK-AUTH': environment.apiToken,
                 'Content-Type': 'application/json'
@@ -56,16 +59,4 @@ async function makeNrkRequest(params) {
             return null;
         }
     }
-}
-
-function DataURIToBlob(dataURI) {
-    const splitDataURI = dataURI.split(',')
-    const byteString = splitDataURI[0].indexOf('base64') >= 0 ? Buffer.from(splitDataURI[1], 'base64') : decodeURI(splitDataURI[1])
-    const mimeString = splitDataURI[0].split(':')[1].split(';')[0]
-
-    const ia = new Uint8Array(byteString.length)
-    for (let i = 0; i < byteString.length; i++)
-        ia[i] = byteString.charCodeAt(i)
-
-    return new Blob([ia], { type: mimeString })
 }
