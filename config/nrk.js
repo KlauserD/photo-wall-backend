@@ -20,7 +20,7 @@ module.exports = {
             'mnr': mnr
         });
 
-        strapi.log.debug('nrk emp: ' + JSON.stringify(data));
+        // strapi.log.debug('nrk emp: ' + JSON.stringify(data));
 
         if(data == null) return null;
 
