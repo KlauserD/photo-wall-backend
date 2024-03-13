@@ -8,7 +8,7 @@ module.exports = {
     async getFilterMembers(filterId) {
         const members = await makeNrkRequest({
             'req': 'GetFilterMember',
-            'filterId': filterId
+            'filterid': filterId
         });
 
         strapi.log.debug('members: ', members);
