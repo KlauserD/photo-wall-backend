@@ -12,7 +12,7 @@ module.exports = {
         });
 
         strapi.log.debug('members: ');
-        strapi.log.debug(members);
+        strapi.log.debug(JSON.stringify(members));
     },
 
     async getEmployeeByMnr(mnr) {
