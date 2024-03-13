@@ -66,8 +66,6 @@ module.exports = createCoreService('api::employee.employee', ({ strapi }) =>  ({
         const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(strapiEmployee.mnr);
 
         if(nrkEmp != null) {
-          // await strapi.config['nrk'].getFilterMembers(4221);
-
           await super.update(strapiEmployee.id, {
             data: {
               name: nrkEmp.name,
