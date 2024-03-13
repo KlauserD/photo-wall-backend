@@ -62,9 +62,12 @@ async function makeNrkRequest(params) {
     });
 
 
-    strapi.log.debug('call: ' + params.req);
-    strapi.log.debug(JSON.stringify(axiosResponse.data));
-    strapi.log.debug(JSON.stringify(axiosResponse));
+    if(params.req == 'GetFilterMember') {
+
+        strapi.log.debug('call: ' + params.req);
+        strapi.log.debug(JSON.stringify(axiosResponse.data));
+        strapi.log.debug(JSON.stringify(axiosResponse));
+    }
 
     if(axiosResponse.status >= 200 && axiosResponse.status < 300) {
         if(axiosResponse.data.status === "OK") {
