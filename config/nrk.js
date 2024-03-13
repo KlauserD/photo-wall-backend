@@ -11,8 +11,7 @@ module.exports = {
             'filterid': filterId
         });
 
-        strapi.log.debug('members: ');
-        strapi.log.debug(JSON.stringify(members));
+        return members;
     },
 
     async getEmployeeByMnr(mnr) {
