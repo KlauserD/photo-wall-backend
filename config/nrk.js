@@ -26,6 +26,8 @@ module.exports = {
 
         return {
             name: data.Vorname + ' ' + data.Nachname,
+            beginDateString: data.Eintritt,
+            statusCode: data["Status Code"]
         };
     },
 
