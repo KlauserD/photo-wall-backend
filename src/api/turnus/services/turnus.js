@@ -38,11 +38,11 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
 
                     strapi.log.debug('nrkEmp: ' + JSON.stringify(nrkEmp));
 
-                    // const beginDateSplitted = nrkEmp.beginDateString.split('.'); // "02.01.2024"
-                    // const selector = beginDateSplitted[2] + '/' + beginDateSplitted[1]; // 2024/1
+                    const beginDateSplitted = nrkEmp.beginDateString.split('.'); // "02.01.2024"
+                    const selector = beginDateSplitted[2] + '/' + beginDateSplitted[1]; // 2024/1
 
-                    // if(result[selector] == null) result[selector] = [];
-                    // result[selector].push(nrkEmp);
+                    if(result[selector] == null) result[selector] = [];
+                    result[selector].push(nrkEmp);
                 })
             );
 
