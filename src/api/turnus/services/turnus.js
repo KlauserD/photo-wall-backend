@@ -11,11 +11,14 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
         // Calling the default core controller
         const { results, pagination } = await super.find(...args);
 
-        results.sort((a, b) => (b.year + b.month / 12) - (a.year + a.month / 12));
-
+        let latestTurnus;
         results.forEach(turnus => {
-            strapi.log.debug('year: ' + turnus.year + ' month: ' + turnus.month + ', updated: ' + turnus.updatedAt);
+            if(latestTurnus == null || (turnus.year >= latestTurnus.year && turnus.month > latestTurnus.month)) {
+                latestTurnus = turnus;
+            }
         });
+
+        strapi.log.debug('lastet turnus: ' + latestTurnus.year + '/' + latestTurnus.month);
 
         return { results, pagination };
     }
