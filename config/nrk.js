@@ -61,8 +61,10 @@ async function makeNrkRequest(params) {
             }
     });
 
-    strapi.log.log(JSON.stringify(axiosResponse.data));
-    strapi.log.log(JSON.stringify(axiosResponse));
+
+    strapi.log.debug('call: ' + params.req);
+    strapi.log.debug(JSON.stringify(axiosResponse.data));
+    strapi.log.debug(JSON.stringify(axiosResponse));
 
     if(axiosResponse.status >= 200 && axiosResponse.status < 300) {
         if(axiosResponse.data.status === "OK") {
