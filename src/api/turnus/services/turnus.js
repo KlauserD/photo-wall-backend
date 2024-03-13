@@ -29,16 +29,22 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
 
         let result = {};
 
-        if((new Date() - new Date(latestTurnus.updatedAt)) / 36e5 > 12) { // last updated longer than 12h ago
+        if((new Date() - new Date(latestTurnus.updatedAt)) / 36e5 > 0) { // last updated longer than 12h ago
             const memberMnrs = await strapi.config['nrk'].getFilterMembers(30287);
 
             await Promise.all(
                 memberMnrs.map(async mnr => {
                     const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
+                    const beginDateSplitted = nrkEmp.Eintritt.split('.'); // "02.01.2024"
+                    const selector = beginDateSplitted[2] + '/' + beginDateSplitted[1]; // 2024/1
 
-                    strapi.log.debug(JSON.stringify(nrkEmp));
+                    if(result[selector] == null) result[selector] = [];
+                    result[selector].push(nrkEmp);
                 })
             );
+
+            strapi.log.debug(JSON.stringify(result));
+
         }
 
         strapi.log.debug('lastet turnus: ' + latestTurnus.year + '/' + latestTurnus.month);
