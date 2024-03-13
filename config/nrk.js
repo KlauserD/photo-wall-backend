@@ -5,6 +5,16 @@ const environment = {
 };
 
 module.exports = {
+    async getFilterMembers(filterId) {
+        const members = await makeNrkRequest({
+            'req': 'GetFilterMember',
+            'filterId': filterId
+        });
+
+        strapi.log.debug('members: ', members);
+        strapi.log.debug('members stringed: ', JSON.stringify(members));
+    },
+
     async getEmployeeByMnr(mnr) {
         const data = await makeNrkRequest({
             'req': 'GetMAData',

@@ -10,12 +10,12 @@ const axios = require('axios').default;
 
 function removeUmlauts(str) {
   return str.replace('/\u00dc/g', 'Ue')
-    .replace('/\u00fc/g', 'ue')
-    .replace('/\u00c4/g', 'Ae')
-    .replace('/\u00e4/g', 'ae')
-    .replace('/\u00d6/g', 'Oe')
-    .replace('/\u00f6/g', 'oe')
-    .replace('/\u00df/g', 'ss')
+    .replace(/\u00fc/g, 'ue')
+    .replace(/\u00c4/g, 'Ae')
+    .replace(/\u00e4/g, 'ae')
+    .replace(/\u00d6/g, 'Oe')
+    .replace(/\u00f6/g, 'oe')
+    .replace(/\u00df/g, 'ss')
 }
 
 async function updatePicture(employee, fileBlob, filename) {
@@ -60,12 +60,14 @@ module.exports = createCoreService('api::employee.employee', ({ strapi }) =>  ({
 
       if(strapiEmployee.mnr == null || strapiEmployee.mnr < 0) {
         strapi.log.debug('No MNR has been set for ' + strapiEmployee.name + '. No data fetching possible.');
-      } else if((new Date() - new Date(strapiEmployee.updatedAt)) / 36e5 > 0) { // last updated longer than 24h ago
+      } else if((new Date() - new Date(strapiEmployee.updatedAt)) / 36e5 > 12) { // last updated longer than 12h ago
         strapi.log.debug('Trying to update employee: ' + strapiEmployee.mnr);
         
         const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(strapiEmployee.mnr);
 
         if(nrkEmp != null) {
+          await strapi.config['nrk'].getFilterMembers(4221);
+
           await super.update(strapiEmployee.id, {
             data: {
               name: nrkEmp.name,
