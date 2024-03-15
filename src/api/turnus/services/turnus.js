@@ -101,6 +101,8 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                     })
                 );
 
+                strapi.log.debug(JSON.stringify(membersGroupedByTurnus));
+
                 strapiTurnuses.forEach(turnus => {
                     if(!membersGroupedByTurnus.hasOwnProperty(turnus.year + '/' + turnus.month)) {
                         // set turnus inactive
