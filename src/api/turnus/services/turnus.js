@@ -39,7 +39,6 @@ async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
     );
 
     const form = new FormData();
-
     nrkEmps.forEach(nrkEmp => {
         form.append('files', nrkEmp.pictureBlob, nrkEmp.pictureFilename);
     });
@@ -144,6 +143,13 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                                 populate: '*'
                             });
                         }
+
+                        // empty pictures before adding new ones
+                        await super.update(strapiTurnus.id, {
+                            data: {
+                              pictures: null,
+                            },
+                        });
 
                         await updateTurnusPictures(strapiTurnus, membersGroupedByTurnus[turnusKey], strapi)
                     }
