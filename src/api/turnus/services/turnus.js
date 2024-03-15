@@ -157,6 +157,6 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
             }
         }
 
-        return { results: strapiTurnuses, pagination };
+        return await super.find(...args);
     }
 }));
