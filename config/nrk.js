@@ -25,6 +25,7 @@ module.exports = {
         if(data == null) return null;
 
         return {
+            mnr: mnr,
             name: data.Vorname + ' ' + data.Nachname,
             beginDateString: data.Eintritt,
             statusCode: data["Status Code"]
