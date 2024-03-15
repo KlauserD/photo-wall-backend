@@ -131,6 +131,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
 
                         let strapiTurnus = turnusQueryResult.length > 0 ? turnusQueryResult[0] : null;
                         if(strapiTurnus == null) {
+                            strapi.log.debug('adding turnus ' + turnusYear + '/' + turnusMonth);
                             strapiTurnus = await super.create({
                                 data: {
                                     year: turnusYear,
