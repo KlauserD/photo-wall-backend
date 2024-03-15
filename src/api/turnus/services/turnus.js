@@ -115,7 +115,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                 for (const turnusKey in membersGroupedByTurnus) {
                     if (Object.hasOwnProperty.call(membersGroupedByTurnus, turnusKey)) {
                         const turnusKeySplitted = turnusKey.split('/');
-                        const turnusYear = turnusKeySplitted[0] + 0;
+                        const turnusYear = turnusKeySplitted[0];
                         const turnusMonth = turnusKeySplitted[1];
 
                         /* make sure turnus entry exists in strapi */
