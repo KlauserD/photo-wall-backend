@@ -136,7 +136,8 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                                     year: turnusYear,
                                     month: turnusMonth,
                                     active: true
-                                }
+                                },
+                                populate: '*'
                             });
                         }
 
