@@ -14,8 +14,9 @@ async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
             const pictureBlob = await strapiInstance.config['nrk'].getPictureByMnr(nrkEmp.mnr);
     
             const filename = 'api_' + 
-                nrkEmp.statusCode == 'Z' ? 'ZDL-' : 'FSJ-' +
+                (nrkEmp.statusCode == 'Z' ? 'ZDL-' : 'FSJ-') +
                 nrkEmp.name +
+                '.' +
                 pictureBlob.type.split('/')[1];
     
 
