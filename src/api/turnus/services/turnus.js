@@ -137,7 +137,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                             });
                         }
 
-                        await updateTurnusPictures(strapiTurnus.id, membersGroupedByTurnus[turnusKey])
+                        await updateTurnusPictures(strapiTurnus.id, membersGroupedByTurnus[turnusKey], strapi)
                     }
                 }
             }
