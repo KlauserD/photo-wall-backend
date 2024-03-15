@@ -101,7 +101,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                     })
                 );
 
-                strapi.log.debug(JSON.stringify(membersGroupedByTurnus));
+                // strapi.log.debug(JSON.stringify(membersGroupedByTurnus));
 
                 strapiTurnuses.forEach(turnus => {
                     if(!membersGroupedByTurnus.hasOwnProperty(turnus.year + '/' + turnus.month)) {
@@ -119,6 +119,14 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                         const turnusMonth = turnusKeySplitted[1];
 
                         /* make sure turnus entry exists in strapi */
+                        strapi.log.debug(JSON.stringify(await super.find({
+                            filters: {
+                                year: turnusYear,
+                                month: turnusMonth
+                            }
+                        })))
+
+
                         const turnusQueryResult = await super.find({
                             filters: {
                                 year: turnusYear,
