@@ -132,7 +132,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                                 year: turnusYear,
                                 month: turnusMonth
                             }
-                        }).results;
+                        })['results'];
 
                         let strapiTurnus = turnusQueryResult.length > 0 ? turnusQueryResult[0] : null;
                         if(strapiTurnus == null) {
