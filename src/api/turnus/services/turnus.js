@@ -119,20 +119,12 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                         const turnusMonth = turnusKeySplitted[1];
 
                         /* make sure turnus entry exists in strapi */
-                        strapi.log.debug(JSON.stringify(await super.find({
+                        const turnusQueryResult = (await super.find({
                             filters: {
                                 year: turnusYear,
                                 month: turnusMonth
                             }
-                        })))
-
-
-                        const turnusQueryResult = await super.find({
-                            filters: {
-                                year: turnusYear,
-                                month: turnusMonth
-                            }
-                        })['results'];
+                        })).results;
 
                         let strapiTurnus = turnusQueryResult.length > 0 ? turnusQueryResult[0] : null;
                         if(strapiTurnus == null) {
