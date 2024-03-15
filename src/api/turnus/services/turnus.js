@@ -9,7 +9,7 @@ const axios = require('axios').default;
 
 async function updateTurnusPictures(turnusId, nrkEmps, strapiInstance) {
 
-    Promise.all(
+    await Promise.all(
         nrkEmps.map(async nrkEmp => {
             const pictureBlob = await strapiInstance.config['nrk'].getPictureByMnr(nrkEmp.mnr);
     
