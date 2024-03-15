@@ -7,7 +7,7 @@
 const { createCoreService } = require('@strapi/strapi').factories;
 const axios = require('axios').default;
 
-async function updateTurnusPictures(turnusId, nrkEmps, strapiInstance) {
+async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
 
     await Promise.all(
         nrkEmps.map(async nrkEmp => {
@@ -19,7 +19,7 @@ async function updateTurnusPictures(turnusId, nrkEmps, strapiInstance) {
                 pictureBlob.type.split('/')[1];
     
             // delete if api image is present
-            const existingApiPictures = nrkEmp.pictures.filter(picture => picture.name == filename);
+            const existingApiPictures = turnus.pictures.filter(picture => picture.name == filename);
             if(existingApiPictures.length > 0) {
                 await axios.delete(
                 'http://127.0.0.1:1337/api/upload/files/' + existingApiPictures[0].id,
@@ -43,7 +43,7 @@ async function updateTurnusPictures(turnusId, nrkEmps, strapiInstance) {
     });
 
     form.append('ref', 'api::turnus.turnus');
-    form.append('refId', turnusId);
+    form.append('refId', turnus.id);
     form.append('field', 'pictures');
 
     try {
@@ -137,7 +137,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                             });
                         }
 
-                        await updateTurnusPictures(strapiTurnus.id, membersGroupedByTurnus[turnusKey], strapi)
+                        await updateTurnusPictures(strapiTurnus, membersGroupedByTurnus[turnusKey], strapi)
                     }
                 }
             }
