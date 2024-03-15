@@ -14,15 +14,12 @@ async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
             const pictureBlob = await strapiInstance.config['nrk'].getPictureByMnr(nrkEmp.mnr);
     
             const filename = 'api_' + 
-                (nrkEmp.statusCode == 'Z' ? 'ZDL-' : 'FSJ-') +
+                (nrkEmp.statusCode == 'Z' ? 'ZD-' : 'FSJ-') +
                 nrkEmp.name +
                 '.' +
                 pictureBlob.type.split('/')[1];
     
 
-            strapiInstance.log.debug(JSON.stringify(turnus));
-            strapiInstance.log.debug('filename: ' + JSON.stringify(turnus));
-            
             // delete if api image is present
             const existingApiPictures = turnus.pictures?.filter(picture => picture.name == filename);
             if(existingApiPictures?.length > 0) {
@@ -95,8 +92,6 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                 await Promise.all(
                     memberMnrs.map(async mnr => {
                         const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
-    
-                        strapi.log.debug('nrkEmp: ' + JSON.stringify(nrkEmp));
     
                         const beginDateSplitted = nrkEmp.beginDateString.split('.'); // "02.01.2024"
                         const selector = parseInt(beginDateSplitted[2]) + '/' + parseInt(beginDateSplitted[1]); // 2024/1
