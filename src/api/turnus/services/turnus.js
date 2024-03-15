@@ -75,7 +75,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
             }
         });
               
-       if((new Date() - new Date(latestTurnus.updatedAt)) / 36e5 > 0) { // last updated longer than 12h ago
+       if((new Date() - new Date(latestTurnus.updatedAt)) / 36e5 > 12) { // last updated longer than 12h ago
             let membersGroupedByTurnus = {};
             /* 
                 {
