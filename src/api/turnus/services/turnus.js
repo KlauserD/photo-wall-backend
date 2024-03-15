@@ -103,14 +103,20 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
 
                 // strapi.log.debug(JSON.stringify(membersGroupedByTurnus));
 
-                strapiTurnuses.forEach(turnus => {
-                    if(!membersGroupedByTurnus.hasOwnProperty(turnus.year + '/' + turnus.month)) {
-                        // set turnus inactive
-                        strapi.log.debug('setting turnus ' + turnus.year + '/' + turnus.month + ' inactive');
-
-                        //TODO
-                    }
-                })
+                await Promise.all(
+                    strapiTurnuses.map(async turnus => {
+                        if(!membersGroupedByTurnus.hasOwnProperty(turnus.year + '/' + turnus.month)) {
+                            // set turnus inactive
+                            strapi.log.debug('setting turnus ' + turnus.year + '/' + turnus.month + ' inactive');
+    
+                            await super.update(turnus.id, {
+                                data: {
+                                  active: false
+                                },
+                            });
+                        }
+                    })
+                );
 
                 for (const turnusKey in membersGroupedByTurnus) {
                     if (Object.hasOwnProperty.call(membersGroupedByTurnus, turnusKey)) {
