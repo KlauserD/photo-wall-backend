@@ -94,7 +94,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                         strapi.log.debug('nrkEmp: ' + JSON.stringify(nrkEmp));
     
                         const beginDateSplitted = nrkEmp.beginDateString.split('.'); // "02.01.2024"
-                        const selector = beginDateSplitted[2] + '/' + beginDateSplitted[1]; // 2024/1
+                        const selector = parseInt(beginDateSplitted[2]) + '/' + parseInt(beginDateSplitted[1]); // 2024/1
     
                         if(membersGroupedByTurnus[selector] == null) membersGroupedByTurnus[selector] = [];
                         membersGroupedByTurnus[selector].push(nrkEmp);
@@ -108,7 +108,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                         // set turnus inactive
                         strapi.log.debug('setting turnus ' + turnus.year + '/' + turnus.month + ' inactive');
 
-
+                        //TODO
                     }
                 })
 
