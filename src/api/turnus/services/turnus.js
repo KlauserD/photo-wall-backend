@@ -94,11 +94,13 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                     memberMnrs.map(async mnr => {
                         const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
     
-                        const beginDateSplitted = nrkEmp.beginDateString.split('.'); // "02.01.2024"
-                        const selector = parseInt(beginDateSplitted[2]) + '/' + parseInt(beginDateSplitted[1]); // 2024/1
-    
-                        if(membersGroupedByTurnus[selector] == null) membersGroupedByTurnus[selector] = [];
-                        membersGroupedByTurnus[selector].push(nrkEmp);
+                        if(nrkEmp != null) {
+                            const beginDateSplitted = nrkEmp.beginDateString.split('.'); // "02.01.2024"
+                            const selector = parseInt(beginDateSplitted[2]) + '/' + parseInt(beginDateSplitted[1]); // 2024/1
+        
+                            if(membersGroupedByTurnus[selector] == null) membersGroupedByTurnus[selector] = [];
+                            membersGroupedByTurnus[selector].push(nrkEmp);
+                        }
                     })
                 );
 
