@@ -87,6 +87,8 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
 
             const memberMnrs = await strapi.config['nrk'].getFilterMembers(30287);
 
+            strapi.log.debug('turnus filter members: ' + JSON.stringify(memberMnrs));
+
             if(memberMnrs != null) {
                 await Promise.all(
                     memberMnrs.map(async mnr => {
