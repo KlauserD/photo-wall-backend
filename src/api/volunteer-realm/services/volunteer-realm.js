@@ -74,7 +74,7 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
             populate: '*'
         });
     } else {
-        await super.update(strapiVolunteer.id, {
+        await strapiInstance.service('api::volunteer.volunteer').update(strapiVolunteer.id, {
             data: volunteerData,
           });
     }
