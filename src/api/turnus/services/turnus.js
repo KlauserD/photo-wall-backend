@@ -95,8 +95,8 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                         const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
     
                         if(nrkEmp != null) {
-                            const beginDateSplitted = nrkEmp.beginDateString.split('.'); // "02.01.2024"
-                            const selector = parseInt(beginDateSplitted[2]) + '/' + parseInt(beginDateSplitted[1]); // 2024/1
+                            const beginDateSplitted = nrkEmp.beginDateString.split('-'); // "2024-01-02"
+                            const selector = parseInt(beginDateSplitted[0]) + '/' + parseInt(beginDateSplitted[1]); // 2024/1
         
                             if(membersGroupedByTurnus[selector] == null) membersGroupedByTurnus[selector] = [];
                             membersGroupedByTurnus[selector].push(nrkEmp);
