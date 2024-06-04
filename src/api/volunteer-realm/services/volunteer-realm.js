@@ -5,6 +5,7 @@
  */
 
 const { createCoreService } = require('@strapi/strapi').factories;
+const axios = require('axios').default;
 const realmFilterIds = [ /*30579, 30582, */ 30585];
 
 function removeUmlauts(str) {
