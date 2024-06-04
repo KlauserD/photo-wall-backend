@@ -94,7 +94,8 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             }
         });
               
-       if((new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12) { // last updated longer than 12h ago
+       if(latestRealm == null ||
+            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
             
             realmFilterIds.forEach(async realmFilterId => {
                 const memberMnrs = await strapi.config['nrk'].getFilterMembers(realmFilterId);
