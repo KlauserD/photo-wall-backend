@@ -33,7 +33,7 @@ async function updatePicture(employee, fileBlob, filename) {
   
     const form = new FormData();
     form.append('files', fileBlob, filename);
-    form.append('ref', 'api::employee.employee');
+    form.append('ref', 'api::volunteer.volunteer');
     form.append('refId', employee.id); //employee.id);
     form.append('field', 'picture');
   
