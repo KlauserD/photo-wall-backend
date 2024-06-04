@@ -1,90 +1,129 @@
 'use strict';
 
 /**
- * turnus service
+ * volunteer-realm service
  */
 
 const { createCoreService } = require('@strapi/strapi').factories;
-const axios = require('axios').default;
+const realmFilterIds = [ /*30579, 30582, */ 30585];
 
-async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
+function removeUmlauts(str) {
+    return str.replace('/\u00dc/g', 'Ue')
+      .replace(/\u00fc/g, 'ue')
+      .replace(/\u00c4/g, 'Ae')
+      .replace(/\u00e4/g, 'ae')
+      .replace(/\u00d6/g, 'Oe')
+      .replace(/\u00f6/g, 'oe')
+      .replace(/\u00df/g, 'ss')
+}
 
-    await Promise.all(
-        nrkEmps.map(async nrkEmp => {
-            const pictureBlob = await strapiInstance.config['nrk'].getPictureByMnr(nrkEmp.mnr);
-    
-            const filename = 'api_' + 
-                (nrkEmp.statusCode == 'Z' ? 'ZD-' : 'FSJ-') +
-                nrkEmp.name +
-                '.' +
-                pictureBlob.type.split('/')[1];
-    
-
-            // delete if api image is present
-            const existingApiPictures = turnus.pictures?.filter(picture => picture.name == filename);
-            if(existingApiPictures?.length > 0) {
-                await axios.delete(
-                'http://127.0.0.1:1337/api/upload/files/' + existingApiPictures[0].id,
-                {
-                    headers: {
-                    "Authorization": 'Bearer ' + strapiInstance.config['api'].uploadToken
-                    }
-                }
-                );
-            }
-    
-            nrkEmp.pictureBlob = pictureBlob;
-            nrkEmp.pictureFilename = filename;
-        })
-    );
-
+async function updatePicture(employee, fileBlob, filename) {
+    // delete if api image is present
+    if(employee.picture?.name == filename) {
+      await axios.delete(
+        'http://127.0.0.1:1337/api/upload/files/' + employee.picture.id,
+        {
+          headers: {
+            "Authorization": 'Bearer ' + strapi.config['api'].uploadToken
+          }
+        }
+      );
+    }
+  
     const form = new FormData();
-    nrkEmps.forEach(nrkEmp => {
-        form.append('files', nrkEmp.pictureBlob, nrkEmp.pictureFilename);
-    });
-
-    form.append('ref', 'api::turnus.turnus');
-    form.append('refId', turnus.id);
-    form.append('field', 'pictures');
-
+    form.append('files', fileBlob, filename);
+    form.append('ref', 'api::employee.employee');
+    form.append('refId', employee.id); //employee.id);
+    form.append('field', 'picture');
+  
     try {
-        await axios.post(
+      await axios.post(
         'http://127.0.0.1:1337/api/upload', 
         form,
         {
-            headers: {
+          headers: {
             "Authorization": 'Bearer ' + strapi.config['api'].uploadToken,
             "Content-Type": 'multipart/form-data'
-            }
+          }
         });
-
+  
     } catch(e) {
-        strapi.log.error('upload fetch error: ' + e);
+      strapi.log.error('upload fetch error: ' + e);
     }
+  }
+
+async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
+    const volunteerQueryResult = (await strapiInstance.service('api::volunteer.volunteer').find({
+        filters: {
+            mnr: nrkEmp.mnr
+        },
+        populate: '*'
+    })).results;
+
+    let strapiVolunteer = volunteerQueryResult.length > 0 ? volunteerQueryResult[0] : null;
+
+
+    const volunteerData = {
+        mnr: nrkEmp.mnr,
+        name: nrkEmp.name
+    }
+
+    if(strapiVolunteer == null) {
+        strapiVolunteer = await strapiInstance.service('api::volunteer.volunteer').create({
+            data: volunteerData,
+            populate: '*'
+        });
+    } else {
+        await super.update(strapiVolunteer.id, {
+            data: volunteerData,
+          });
+    }
+
+    return strapiVolunteer;
 }
 
-module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
+module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ strapi }) => ({
     async find(...args) {  
         // Calling the default core controller
-        const { results: strapiTurnuses, pagination } = await super.find(...args);
+        const { results: strapiRealms, pagination } = await super.find(...args);
 
-        let latestTurnus;
-        strapiTurnuses.forEach(turnus => {
-            if(latestTurnus == null || 
-                (turnus.year > latestTurnus.year || (turnus.year == latestTurnus.year && turnus.month > latestTurnus.month))) {
-                latestTurnus = turnus;
+        let latestRealm;
+        strapiRealms.forEach(realm => {
+            if(latestRealm == null || (new Date(realm.updatedAt) > new Date(latestRealm.updatedAt))) {
+                latestRealm = realm;
             }
         });
               
-       if((new Date() - new Date(latestTurnus.updatedAt)) / 36e5 > 12) { // last updated longer than 12h ago
-            let membersGroupedByTurnus = {};
-            /* 
-                {
-                    "2024/1": [ ... ],
-                    "2023/10": [ ... ],
-                    "2023/7": [ ... ]
+       if((new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12) { // last updated longer than 12h ago
+            
+            realmFilterIds.forEach(async realmFilterId => {
+                const memberMnrs = await strapi.config['nrk'].getFilterMembers(realmFilterId);
+                
+                if(memberMnrs != null) {
+                    await Promise.all(
+                        memberMnrs.map(async mnr => {
+                            const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
+
+                            if(nrkEmp != null) {
+                                const strapiVolunteer = await createOrUpdateVolunteer(nrkEmp, strapi);
+
+                                const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiVolunteer.mnr);
+                                if(pictureBlob != null) {
+                                    await updatePicture(
+                                      strapiVolunteer,
+                                      pictureBlob,
+                                      'api_' + removeUmlauts(nrkEmp.name) + "." + pictureBlob.type.split('/')[1]
+                                    );
+                                }
+
+                                await strapi.config['nrk'].getEmployeeQualificationByMnr();
+                            }
+                        })
+                    )
                 }
-            */
+            });
+
+            let membersGroupedByTurnus = {};
 
             const memberMnrs = await strapi.config['nrk'].getFilterMembers(30287);
 
@@ -108,7 +147,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                 // strapi.log.debug(JSON.stringify(membersGroupedByTurnus));
 
                 await Promise.all(
-                    strapiTurnuses.map(async turnus => {
+                    strapiRealms.map(async turnus => {
                         if(!membersGroupedByTurnus.hasOwnProperty(turnus.year + '/' + turnus.month)) {
                             // set turnus inactive
                             strapi.log.debug('setting turnus ' + turnus.year + '/' + turnus.month + ' inactive');

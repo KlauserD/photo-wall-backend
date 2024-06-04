@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "volunteer_realms",
+  "info": {
+    "singularName": "volunteer-realm",
+    "pluralName": "volunteer-realms",
+    "displayName": "VolunteerRealm",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "volunteers": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::volunteer.volunteer",
+      "inversedBy": "volunteer_realms"
+    }
+  }
+}

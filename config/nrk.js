@@ -32,6 +32,26 @@ module.exports = {
         };
     },
 
+    async getEmployeeQualificationByMnr(mnr) {
+        const data = await makeNrkRequest({
+            'req': 'MAQualifikationen',
+            'mnr': mnr
+        });
+
+        // strapi.log.debug('nrk emp for id ' + mnr + ': ' + JSON.stringify(data));
+
+        if(data == null) return null;
+
+        console.log(data);
+
+        // return {
+        //     mnr: mnr,
+        //     name: data.Vorname + ' ' + data.Nachname,
+        //     beginDateString: data["Status von"],
+        //     statusCode: data["Status Code"]
+        // };
+    },
+
     async getPictureByMnr(mnr) {
         const resultString = await makeNrkRequest({
             'req': 'MAPicture',
