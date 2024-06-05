@@ -33,15 +33,23 @@ module.exports = {
     },
 
     async getAllEmployees() {
-        const data = await makeNrkRequest({
+        let data = await makeNrkRequest({
             'req': 'GetAllMA',
             'withguests': 0
         });
 
-        strapi.log.debug('all ma: ');
-        strapi.log.debug(data);
+        // strapi.log.debug('all ma: ');
+        // strapi.log.debug(data);
 
         if(data == null) return null;
+
+        return data.map(nrkObject => {
+            return {
+                mnr: nrkObject.mnr,
+                name: nrkObject.Vorname + ' ' + nrkObject.Nachname,
+                statusCode: nrkObject["Status Code"]
+            }
+        });
     },
 
     async getEmployeeQualificationByMnr(mnr) {
