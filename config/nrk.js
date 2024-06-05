@@ -32,6 +32,18 @@ module.exports = {
         };
     },
 
+    async getAllEmployees() {
+        const data = await makeNrkRequest({
+            'req': 'GetAllMA',
+            'withguests': 0
+        });
+
+        strapi.log.debug('all ma: ');
+        strapi.log.debug(data);
+
+        if(data == null) return null;
+    },
+
     async getEmployeeQualificationByMnr(mnr) {
         const data = await makeNrkRequest({
             'req': 'MAQualifikationen',
@@ -41,8 +53,6 @@ module.exports = {
         // strapi.log.debug('nrk emp for id ' + mnr + ': ' + JSON.stringify(data));
 
         if(data == null) return null;
-
-        console.log(data);
 
         // return {
         //     mnr: mnr,

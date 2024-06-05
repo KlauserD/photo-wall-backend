@@ -94,37 +94,39 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                 latestRealm = realm;
             }
         });
+
+        await strapi.config['nrk'].getAllEmployees();
               
-       if(latestRealm == null ||
-            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
+      //  if(latestRealm == null ||
+      //       (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
             
-            realmFilterIds.forEach(async realmFilterId => {
-                const memberMnrs = await strapi.config['nrk'].getFilterMembers(realmFilterId);
+      //       realmFilterIds.forEach(async realmFilterId => {
+      //           const memberMnrs = await strapi.config['nrk'].getFilterMembers(realmFilterId);
                 
-                if(memberMnrs != null) {
-                    await Promise.all(
-                        memberMnrs.map(async mnr => {
-                            const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
+      //           if(memberMnrs != null) {
+      //               await Promise.all(
+      //                   memberMnrs.map(async mnr => {
+      //                       const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
 
-                            if(nrkEmp != null) {
-                                const strapiVolunteer = await createOrUpdateVolunteer(nrkEmp, strapi);
+      //                       if(nrkEmp != null) {
+      //                           const strapiVolunteer = await createOrUpdateVolunteer(nrkEmp, strapi);
 
-                                const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiVolunteer.mnr);
-                                if(pictureBlob != null) {
-                                    await updatePicture(
-                                      strapiVolunteer,
-                                      pictureBlob,
-                                      'api_' + removeUmlauts(nrkEmp.name) + "." + pictureBlob.type.split('/')[1]
-                                    );
-                                }
+      //                           const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiVolunteer.mnr);
+      //                           if(pictureBlob != null) {
+      //                               await updatePicture(
+      //                                 strapiVolunteer,
+      //                                 pictureBlob,
+      //                                 'api_' + removeUmlauts(nrkEmp.name) + "." + pictureBlob.type.split('/')[1]
+      //                               );
+      //                           }
 
-                                await strapi.config['nrk'].getEmployeeQualificationByMnr(strapiVolunteer.mnr);
-                            }
-                        })
-                    )
-                }
-            });
-        }
+      //                           await strapi.config['nrk'].getEmployeeQualificationByMnr(strapiVolunteer.mnr);
+      //                       }
+      //                   })
+      //               )
+      //           }
+      //       });
+      //   }
 
         return await super.find(...args);
     }
