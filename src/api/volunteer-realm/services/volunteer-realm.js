@@ -125,7 +125,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
               })
             );
 
-            strapi.log.debug(JSON.stringify(allVolunteers));
+            //strapi.log.debug(JSON.stringify(allVolunteers));
         }
         //strapi.log.debug('volunteers: ' + JSON.stringify(allVolunteers));
       //  if(latestRealm == null ||
