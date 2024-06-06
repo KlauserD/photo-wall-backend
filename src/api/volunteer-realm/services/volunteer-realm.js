@@ -97,34 +97,20 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
     return strapiVolunteer;
 }
 
-async function createOrUpdateRealm(realm, volunteerIds, strapiInstance) {
-  const volunteerRealmQueryResult = (await strapiInstance.service('api::volunteer-realm.volunteer-realm').find({
-      filters: {
-          name: realm.name
-      },
-      populate: '*'
-  })).results;
-
-  let strapiRealm = volunteerRealmQueryResult.length > 0 ? volunteerRealmQueryResult[0] : null;
-
-  const realmData = {
-      name: realm.name,
-      volunteers: volunteerIds
-  }
-
+async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
   strapi.log.debug('realm data: ' + JSON.stringify(realmData));
 
-  // if(strapiRealm == null) {
-  //   strapiRealm = await strapiInstance.service('api::volunteer-realm.volunteer-realm').create({
-  //         data: realmData,
-  //         populate: '*'
-  //     });
-  // } else {
-  //     await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(strapiRealm.id, {
-  //         data: realmData,
-  //         populate: '*'
-  //       });
-  // }
+  if(strapiRealm == null) {
+    strapiRealm = await strapiInstance.service('api::volunteer-realm.volunteer-realm').create({
+          data: realmData,
+          populate: '*'
+      });
+  } else {
+      await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(strapiRealm.id, {
+          data: realmData,
+          populate: '*'
+        });
+  }
 
   return strapiRealm;
 }
@@ -185,7 +171,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             await Promise.all(
               distinctVolunteers.map(async nrkVolunteer => {
                 nrkVolunteer.qualification = await strapi.config['nrk'].getEmployeeQualificationByMnr(nrkVolunteer.mnr)
-  
+
                 const strapiVolunteer = await createOrUpdateVolunteer(nrkVolunteer, strapi);
                 nrkVolunteer.strapiId = strapiVolunteer.id;
   
@@ -203,7 +189,21 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             // add realms to strapi DB and relate to volunteers
             await Promise.all(
               realms.map(async realm => {
-                await createOrUpdateRealm(realm, realm.volunteers.map(volunteer => volunteer.strapiId), strapi);
+                const realmData = {
+                  name: realm.name,
+                  volunteers: realm.volunteers.map(volunteer => volunteer.strapiId)
+                }
+
+                // find existing realm in DB
+                const volunteerRealmQueryResult = (await super.find({
+                  filters: {
+                      name: realm.name
+                  },
+                  populate: '*'
+                })).results;
+                let strapiRealm = volunteerRealmQueryResult.length > 0 ? volunteerRealmQueryResult[0] : null;
+
+                await createOrUpdateRealm(strapiRealm, realmData, strapi);
               })
             );
           }
