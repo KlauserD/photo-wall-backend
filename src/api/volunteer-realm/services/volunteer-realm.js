@@ -7,7 +7,7 @@
 const { createCoreService } = require('@strapi/strapi').factories;
 const axios = require('axios').default;
 
-const realms = [
+const declaredRealms = [
   {
     name: 'RKT',
     activityAreas: ['KTW1', 'RTW1'],
@@ -100,6 +100,36 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
     return strapiVolunteer;
 }
 
+async function createOrUpdateRealm(realm, volunteerIds, strapiInstance) {
+  const volunteerRealmQueryResult = (await strapiInstance.service('api::volunteer-realm.volunteer-realm').find({
+      filters: {
+          name: realm.name
+      },
+      populate: '*'
+  })).results;
+
+  let strapiRealm = volunteerQueryResult.length > 0 ? volunteerQueryResult[0] : null;
+
+  const realmData = {
+      name: realm.name,
+      volunteers: volunteerIds
+  }
+
+  if(strapiRealm == null) {
+    strapiRealm = await strapiInstance.service('api::volunteer-realm.volunteer-realm').create({
+          data: realmData,
+          populate: '*'
+      });
+  } else {
+      await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(strapiRealm.id, {
+          data: realmData,
+          populate: '*'
+        });
+  }
+
+  return strapiRealm;
+}
+
 module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ strapi }) => ({
     async find(...args) {  
         // Calling the default core controller
@@ -129,7 +159,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
               })
             );
 
-            realms.forEach(realm => {
+            declaredRealms.forEach(realm => {
               allVolunteers.forEach(volunteer => {
                 if(volunteer.activityAreas.some(volunteerArea => realm.activityAreas.includes(volunteerArea['TB_ID']))) {
                   realm.volunteers.push(volunteer);
@@ -138,18 +168,17 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             });
 
             let distinctVolunteers = [];
-            realms.forEach(realm => distinctVolunteers.push(...realm.volunteers));
+            declaredRealms.forEach(realm => distinctVolunteers.push(...realm.volunteers));
             strapi.log.debug('length before distinct: ' + distinctVolunteers.length);
             distinctVolunteers = distinctVolunteers.filter((item, index) => distinctVolunteers.indexOf(item) === index);
             strapi.log.debug('length after distinct: ' + distinctVolunteers.length);
 
+            // add all volunteers to strapi DB
             distinctVolunteers.map(async nrkVolunteer => {
               nrkVolunteer.qualification = await strapi.config['nrk'].getEmployeeQualificationByMnr(nrkVolunteer.mnr)
 
               const strapiVolunteer = await createOrUpdateVolunteer(nrkVolunteer, strapi);
               nrkVolunteer.strapiId = strapiVolunteer.id;
-
-              strapi.log.debug('id for ' + nrkVolunteer.name + ': ' + nrkVolunteer.strapiId);
 
               const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiVolunteer.mnr);
               if(pictureBlob != null) {
@@ -160,6 +189,11 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                   );
               }
             });
+
+            // add realms to strapi DB and relate to volunteers
+            declaredRealms.map(async realm => {
+              await createOrUpdateRealm(realm, realm.volunteers.map(volunteer => volunteer.strapiId), strapi);
+            })
           }
         //strapi.log.debug('volunteers: ' + JSON.stringify(allVolunteers));
       //  if(latestRealm == null ||
