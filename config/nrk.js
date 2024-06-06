@@ -39,13 +39,13 @@ module.exports = {
         });
 
         // strapi.log.debug('all ma: ');
-        strapi.log.debug(JSON.stringify(data));
+        //strapi.log.debug(JSON.stringify(data));
 
         if(data == null) return null;
 
         return data.map(nrkObject => {
             return {
-                mnr: nrkObject.mnr,
+                mnr: nrkObject.Personalnr,
                 name: nrkObject.Vorname + ' ' + nrkObject.Nachname,
                 statusCode: nrkObject["Status Code"]
             }
