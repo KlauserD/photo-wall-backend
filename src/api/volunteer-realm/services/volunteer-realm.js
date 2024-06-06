@@ -176,26 +176,30 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             strapi.log.debug('length after distinct: ' + distinctVolunteers.length);
 
             // add all volunteers to strapi DB
-            distinctVolunteers.map(async nrkVolunteer => {
-              nrkVolunteer.qualification = await strapi.config['nrk'].getEmployeeQualificationByMnr(nrkVolunteer.mnr)
-
-              const strapiVolunteer = await createOrUpdateVolunteer(nrkVolunteer, strapi);
-              nrkVolunteer.strapiId = strapiVolunteer.id;
-
-              const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiVolunteer.mnr);
-              if(pictureBlob != null) {
-                  await updatePicture(
-                    strapiVolunteer,
-                    pictureBlob,
-                    'api_' + removeUmlauts(nrkVolunteer.name) + "." + pictureBlob.type.split('/')[1]
-                  );
-              }
-            });
+            await Promise.all(
+              distinctVolunteers.map(async nrkVolunteer => {
+                nrkVolunteer.qualification = await strapi.config['nrk'].getEmployeeQualificationByMnr(nrkVolunteer.mnr)
+  
+                const strapiVolunteer = await createOrUpdateVolunteer(nrkVolunteer, strapi);
+                nrkVolunteer.strapiId = strapiVolunteer.id;
+  
+                const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiVolunteer.mnr);
+                if(pictureBlob != null) {
+                    await updatePicture(
+                      strapiVolunteer,
+                      pictureBlob,
+                      'api_' + removeUmlauts(nrkVolunteer.name) + "." + pictureBlob.type.split('/')[1]
+                    );
+                }
+              })
+            );
 
             // add realms to strapi DB and relate to volunteers
-            declaredRealms.map(async realm => {
-              await createOrUpdateRealm(realm, realm.volunteers.map(volunteer => volunteer.strapiId), strapi);
-            })
+            await Promise.all(
+              declaredRealms.map(async realm => {
+                await createOrUpdateRealm(realm, realm.volunteers.map(volunteer => volunteer.strapiId), strapi);
+              })
+            );
           }
         //strapi.log.debug('volunteers: ' + JSON.stringify(allVolunteers));
       //  if(latestRealm == null ||
