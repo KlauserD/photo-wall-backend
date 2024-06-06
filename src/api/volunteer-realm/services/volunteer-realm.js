@@ -143,22 +143,22 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             distinctVolunteers = distinctVolunteers.filter((item, index) => distinctVolunteers.indexOf(item) === index);
             strapi.log.debug('length after distinct: ' + distinctVolunteers.length);
         
-            await strapi.config['nrk'].getEmployeeQualificationByMnr(distinctVolunteers[0].mnr);
+            // await strapi.config['nrk'].getEmployeeQualificationByMnr(distinctVolunteers[0].mnr);
 
-            // distinctVolunteers.map(async nrkVolunteer => {
-            //   const strapiVolunteer = await createOrUpdateVolunteer(nrkVolunteer, strapi);
+            distinctVolunteers.map(async nrkVolunteer => {
+              // const strapiVolunteer = await createOrUpdateVolunteer(nrkVolunteer, strapi);
 
-            //   const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiVolunteer.mnr);
-            //   if(pictureBlob != null) {
-            //       await updatePicture(
-            //         strapiVolunteer,
-            //         pictureBlob,
-            //         'api_' + removeUmlauts(nrkEmp.name) + "." + pictureBlob.type.split('/')[1]
-            //       );
-            //   }
+              // const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiVolunteer.mnr);
+              // if(pictureBlob != null) {
+              //     await updatePicture(
+              //       strapiVolunteer,
+              //       pictureBlob,
+              //       'api_' + removeUmlauts(nrkEmp.name) + "." + pictureBlob.type.split('/')[1]
+              //     );
+              // }
 
-            //   await strapi.config['nrk'].getEmployeeQualificationByMnr(strapiVolunteer.mnr);
-            // })
+              await strapi.config['nrk'].getEmployeeQualificationByMnr(strapiVolunteer.mnr);
+            })
           }
         //strapi.log.debug('volunteers: ' + JSON.stringify(allVolunteers));
       //  if(latestRealm == null ||
