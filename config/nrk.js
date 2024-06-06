@@ -39,7 +39,7 @@ module.exports = {
         });
 
         // strapi.log.debug('all ma: ');
-        strapi.log.debug(data);
+        strapi.log.debug(JSON.stringify(data));
 
         if(data == null) return null;
 
