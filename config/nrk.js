@@ -127,7 +127,7 @@ async function makeNrkRequest(params) {
         if(axiosResponse.data.status === "OK") {
             return axiosResponse.data.data;
         } else {
-            strapi.log.debug(axiosResponse.data);
+            strapi.log.debug(JSON.stringify(axiosResponse.data));
             strapi.log.error(axiosResponse.data.msg);
             return null;
         }
