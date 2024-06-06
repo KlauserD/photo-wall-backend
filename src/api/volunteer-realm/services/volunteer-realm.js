@@ -161,7 +161,10 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
               })
             );
 
-            declaredRealms.forEach(realm => {
+            const realms = [];
+            declaredRealms.forEach(declaredRealm => realms.push(...declaredRealm));
+
+            realms.forEach(realm => {
               allVolunteers.forEach(volunteer => {
                 if(volunteer.activityAreas.some(volunteerArea => realm.activityAreas.includes(volunteerArea['TB_ID']))) {
                   realm.volunteers.push(volunteer);
@@ -170,7 +173,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             });
 
             let distinctVolunteers = [];
-            declaredRealms.forEach(realm => distinctVolunteers.push(...realm.volunteers));
+            realms.forEach(realm => distinctVolunteers.push(...realm.volunteers));
             strapi.log.debug('length before distinct: ' + distinctVolunteers.length);
             distinctVolunteers = distinctVolunteers.filter((item, index) => distinctVolunteers.indexOf(item) === index);
             strapi.log.debug('length after distinct: ' + distinctVolunteers.length);
@@ -183,20 +186,20 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                 const strapiVolunteer = await createOrUpdateVolunteer(nrkVolunteer, strapi);
                 nrkVolunteer.strapiId = strapiVolunteer.id;
   
-                const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiVolunteer.mnr);
-                if(pictureBlob != null) {
-                    await updatePicture(
-                      strapiVolunteer,
-                      pictureBlob,
-                      'api_' + removeUmlauts(nrkVolunteer.name) + "." + pictureBlob.type.split('/')[1]
-                    );
-                }
+                // const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiVolunteer.mnr);
+                // if(pictureBlob != null) {
+                //     await updatePicture(
+                //       strapiVolunteer,
+                //       pictureBlob,
+                //       'api_' + removeUmlauts(nrkVolunteer.name) + "." + pictureBlob.type.split('/')[1]
+                //     );
+                // }
               })
             );
 
             // add realms to strapi DB and relate to volunteers
             await Promise.all(
-              declaredRealms.map(async realm => {
+              realms.map(async realm => {
                 await createOrUpdateRealm(realm, realm.volunteers.map(volunteer => volunteer.strapiId), strapi);
               })
             );
