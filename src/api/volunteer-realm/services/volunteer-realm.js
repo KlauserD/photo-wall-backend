@@ -157,7 +157,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
               //     );
               // }
 
-              await strapi.config['nrk'].getEmployeeQualificationByMnr(strapiVolunteer.mnr);
+              await strapi.config['nrk'].getEmployeeQualificationByMnr(nrkVolunteer.mnr);
             })
           }
         //strapi.log.debug('volunteers: ' + JSON.stringify(allVolunteers));
