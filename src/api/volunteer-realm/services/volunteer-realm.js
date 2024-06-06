@@ -138,7 +138,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             });
 
             let distinctVolunteers = [];
-            realms.forEach(realm => distinctVolunteers.push(realm.volunteers));
+            realms.forEach(realm => distinctVolunteers.push(...realm.volunteers));
             strapi.log.debug('length before distinct: ' + distinctVolunteers.length);
             distinctVolunteers = distinctVolunteers.filter((item, index) => distinctVolunteers.indexOf(item) === index);
             strapi.log.debug('length after distinct: ' + distinctVolunteers.length);
