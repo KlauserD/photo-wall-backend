@@ -123,17 +123,15 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
 
             await Promise.all(
               allVolunteers.map(async volunteer => {
-                volunteer.activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
+                const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
+
+                volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1)
               })
             );
 
             realms.forEach(realm => {
               allVolunteers.forEach(volunteer => {
-                if(volunteer.activityAreas != null &&
-                    volunteer.activityAreas.filter(area => area.aktiv == 1).some(volunteerArea => 
-                      realm.activityAreas.some(realmArea => realmArea['TB_ID'] == volunteerArea)
-                    )
-                  ) {
+                if(realm.activityAreas.some(realmArea => volunteer.activityAreas.includes(realmArea['TB_ID']))) {
                   realm.volunteers.push(volunteer);
                 }
               });
