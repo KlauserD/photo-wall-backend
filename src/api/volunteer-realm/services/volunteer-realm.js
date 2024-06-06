@@ -6,7 +6,21 @@
 
 const { createCoreService } = require('@strapi/strapi').factories;
 const axios = require('axios').default;
-const realmFilterIds = [ /*30579, 30582, */ 30585];
+
+const realms = [
+  {
+    name: 'RKT',
+    activityAreas: ['KTW1', 'RTW1']
+  },
+  {
+    name: 'EAR',
+    activityAreas: ['ZE/ER']
+  },
+  {
+    name: 'TÖT',
+    activityAreas: ['TÖT']
+  }
+];
 
 function removeUmlauts(str) {
     return str.replace('/\u00dc/g', 'Ue')
@@ -101,7 +115,20 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
 
         await strapi.config['nrk'].getEmployeeActivityAreaByMnr(allVolunteers[0].mnr);
 
-        strapi.log.debug('volunteers: ' + JSON.stringify(allVolunteers));
+        if(latestRealm == null ||
+            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
+
+            let allVolunteers = (await strapi.config['nrk'].getAllEmployees()).filter(emp => emp.statusCode == 'E');
+            
+            allVolunteers = await Promise.all(
+              allVolunteers.map(async volunteer => {
+                volunteer.activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
+              })
+            );
+
+            strapi.log.debug(JSON.stringify(allVolunteers));
+        }
+        //strapi.log.debug('volunteers: ' + JSON.stringify(allVolunteers));
       //  if(latestRealm == null ||
       //       (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
             
