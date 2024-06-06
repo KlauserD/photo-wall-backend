@@ -129,12 +129,10 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
               })
             );
 
-            strapi.log.debug(JSON.stringify(allVolunteers));
-
-
             realms.forEach(realm => {
               allVolunteers.forEach(volunteer => {
                 if(realm.activityAreas.some(realmArea => volunteer.activityAreas.includes(realmArea['TB_ID']))) {
+                  strapi.log.debug('adding emp with ' + JSON.stringify(volunteer.activityAreas) + ' to realm with ' + JSON.stringify(realm.activityAreas));
                   realm.volunteers.push(volunteer);
                 }
               });
