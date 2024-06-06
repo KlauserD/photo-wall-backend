@@ -115,19 +115,19 @@ async function createOrUpdateRealm(realm, volunteerIds, strapiInstance) {
       volunteers: volunteerIds
   }
 
-  strapi.log.debug(JSON.stringify(realmData));
+  strapi.log.debug('realm data: ' + JSON.stringify(realmData));
 
-  if(strapiRealm == null) {
-    strapiRealm = await strapiInstance.service('api::volunteer-realm.volunteer-realm').create({
-          data: realmData,
-          populate: '*'
-      });
-  } else {
-      await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(strapiRealm.id, {
-          data: realmData,
-          populate: '*'
-        });
-  }
+  // if(strapiRealm == null) {
+  //   strapiRealm = await strapiInstance.service('api::volunteer-realm.volunteer-realm').create({
+  //         data: realmData,
+  //         populate: '*'
+  //     });
+  // } else {
+  //     await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(strapiRealm.id, {
+  //         data: realmData,
+  //         populate: '*'
+  //       });
+  // }
 
   return strapiRealm;
 }
