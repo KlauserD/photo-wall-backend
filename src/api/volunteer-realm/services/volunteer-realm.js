@@ -156,7 +156,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                   await updatePicture(
                     strapiVolunteer,
                     pictureBlob,
-                    'api_' + removeUmlauts(nrkEmp.name) + "." + pictureBlob.type.split('/')[1]
+                    'api_' + removeUmlauts(nrkVolunteer.name) + "." + pictureBlob.type.split('/')[1]
                   );
               }
             })
