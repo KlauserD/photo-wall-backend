@@ -121,7 +121,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             allVolunteers = await Promise.all(
               allVolunteers.map(async volunteer => {
                 strapi.log.debug('mnr: ' + volunteer.mnr);
-                volunteer.activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
+                //volunteer.activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
               })
             );
 
