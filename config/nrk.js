@@ -121,9 +121,11 @@ async function makeNrkRequest(params) {
             }
     });
 
+    const util = require('util');
+
+    strapi.log.debug(util.inspect(axiosResponse));
     
     if(axiosResponse.status >= 200 && axiosResponse.status < 300) {
-        strapi.log.debug(JSON.stringify(axiosResponse));
         if(axiosResponse.data.status === "OK") {
             return axiosResponse.data.data;
         } else {
