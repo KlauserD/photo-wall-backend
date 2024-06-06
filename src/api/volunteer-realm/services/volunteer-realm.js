@@ -10,18 +10,15 @@ const axios = require('axios').default;
 const declaredRealms = [
   {
     name: 'RKT',
-    activityAreas: ['KTW1', 'RTW1'],
-    volunteers: []
+    activityAreas: ['KTW1', 'RTW1']
   },
   {
     name: 'EAR',
-    activityAreas: ['ZE/ER'],
-    volunteers: []
+    activityAreas: ['ZE/ER']
   },
   {
     name: 'TÖT',
-    activityAreas: ['TÖT'],
-    volunteers: []
+    activityAreas: ['TÖT']
   }
 ];
 
@@ -162,7 +159,11 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             );
 
             const realms = [];
-            declaredRealms.forEach(declaredRealm => realms.push(...declaredRealm));
+            declaredRealms.forEach(declaredRealm => {
+              const realmCopy = { ...declaredRealm };
+              realmCopy.volunteers = [];
+              realms.push(realmCopy);
+            });
 
             realms.forEach(realm => {
               allVolunteers.forEach(volunteer => {
