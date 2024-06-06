@@ -83,7 +83,8 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
 
     const volunteerData = {
         mnr: nrkEmp.mnr,
-        name: nrkEmp.name
+        name: nrkEmp.name,
+        qualification: nrkEmp.qualification
     }
 
     if(strapiVolunteer == null) {
@@ -146,22 +147,18 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             // await strapi.config['nrk'].getEmployeeQualificationByMnr(distinctVolunteers[0].mnr);
 
             distinctVolunteers.map(async nrkVolunteer => {
-              strapi.log.debug(
-                await strapi.config['nrk'].getEmployeeQualificationByMnr(nrkVolunteer.mnr)
+              nrkVolunteer.qualification = await strapi.config['nrk'].getEmployeeQualificationByMnr(nrkVolunteer.mnr)
 
-              );
+              const strapiVolunteer = await createOrUpdateVolunteer(nrkVolunteer, strapi);
 
-              // const strapiVolunteer = await createOrUpdateVolunteer(nrkVolunteer, strapi);
-
-              // const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiVolunteer.mnr);
-              // if(pictureBlob != null) {
-              //     await updatePicture(
-              //       strapiVolunteer,
-              //       pictureBlob,
-              //       'api_' + removeUmlauts(nrkEmp.name) + "." + pictureBlob.type.split('/')[1]
-              //     );
-              // }
-
+              const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiVolunteer.mnr);
+              if(pictureBlob != null) {
+                  await updatePicture(
+                    strapiVolunteer,
+                    pictureBlob,
+                    'api_' + removeUmlauts(nrkEmp.name) + "." + pictureBlob.type.split('/')[1]
+                  );
+              }
             })
           }
         //strapi.log.debug('volunteers: ' + JSON.stringify(allVolunteers));

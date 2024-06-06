@@ -135,7 +135,7 @@ async function makeNrkRequest(params) {
     });
     
     if(axiosResponse.status >= 200 && axiosResponse.status < 300) {
-        if(axiosResponse.data.status === "OK") {
+        if(axiosResponse.data.status === "OK" || axiosResponse.data.status === "NODATA") {
             return axiosResponse.data.data;
         } else {
             strapi.log.error(
