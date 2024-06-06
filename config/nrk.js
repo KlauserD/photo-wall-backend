@@ -58,7 +58,7 @@ module.exports = {
             'mnr': mnr
         });
 
-        // strapi.log.debug('nrk emp for id ' + mnr + ': ' + JSON.stringify(data));
+        strapi.log.debug('qualification for id ' + mnr + ': ' + JSON.stringify(data));
 
         if(data == null) return null;
 
