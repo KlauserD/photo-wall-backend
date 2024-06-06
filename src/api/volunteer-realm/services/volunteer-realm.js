@@ -130,8 +130,8 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             realms.forEach(realm => {
               allVolunteers.forEach(volunteer => {
                 if(volunteer.activityAreas != null &&
-                    volunteer.activityAreas.some(area => 
-                      realm.activityAreas.includes(area['TB_ID'] && area.aktiv == 1)
+                    volunteer.activityAreas.filter(area => area.aktiv == 1).some(volunteerArea => 
+                      realm.activityAreas.some(realmArea => realmArea['TB_ID'] == volunteerArea)
                     )
                   ) {
                   realm.volunteers.push(volunteer);
