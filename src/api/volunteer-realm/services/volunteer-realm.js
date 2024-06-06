@@ -134,6 +134,8 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         // Calling the default core controller
         const { results: strapiRealms, pagination } = await super.find(...args);
 
+        strapi.log.debug('find called');
+
         let latestRealm;
         strapiRealms.forEach(realm => {
             if(latestRealm == null || (new Date(realm.updatedAt) > new Date(latestRealm.updatedAt))) {
