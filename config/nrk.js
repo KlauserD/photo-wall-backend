@@ -120,15 +120,17 @@ async function makeNrkRequest(params) {
                 'Content-Type': 'application/json'
             }
     });
-
-    const util = require('util');
     
     if(axiosResponse.status >= 200 && axiosResponse.status < 300) {
         if(axiosResponse.data.status === "OK") {
             return axiosResponse.data.data;
         } else {
-            strapi.log.debug(JSON.stringify(axiosResponse.data));
-            strapi.log.error(axiosResponse.data.msg);
+            strapi.log.error(
+                'fetch error. status: ' + 
+                axiosResponse.data.status +
+                ', msg: ' +
+                axiosResponse.data.msg
+            );
             return null;
         }
     }
