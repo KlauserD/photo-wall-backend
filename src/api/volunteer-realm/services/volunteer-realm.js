@@ -80,7 +80,6 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
 
     let strapiVolunteer = volunteerQueryResult.length > 0 ? volunteerQueryResult[0] : null;
 
-
     const volunteerData = {
         mnr: nrkEmp.mnr,
         name: nrkEmp.name,
@@ -143,13 +142,14 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             strapi.log.debug('length before distinct: ' + distinctVolunteers.length);
             distinctVolunteers = distinctVolunteers.filter((item, index) => distinctVolunteers.indexOf(item) === index);
             strapi.log.debug('length after distinct: ' + distinctVolunteers.length);
-        
-            // await strapi.config['nrk'].getEmployeeQualificationByMnr(distinctVolunteers[0].mnr);
 
             distinctVolunteers.map(async nrkVolunteer => {
               nrkVolunteer.qualification = await strapi.config['nrk'].getEmployeeQualificationByMnr(nrkVolunteer.mnr)
 
               const strapiVolunteer = await createOrUpdateVolunteer(nrkVolunteer, strapi);
+              nrkVolunteer.strapiId = strapiVolunteer.id;
+
+              strapi.log.debug('id for ' + nrkVolunteer.name + ': ' + nrkVolunteer.strapiId);
 
               const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiVolunteer.mnr);
               if(pictureBlob != null) {
@@ -159,7 +159,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                     'api_' + removeUmlauts(nrkVolunteer.name) + "." + pictureBlob.type.split('/')[1]
                   );
               }
-            })
+            });
           }
         //strapi.log.debug('volunteers: ' + JSON.stringify(allVolunteers));
       //  if(latestRealm == null ||
