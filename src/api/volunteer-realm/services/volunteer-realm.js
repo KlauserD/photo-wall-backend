@@ -118,12 +118,17 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
 
             let allVolunteers = (await strapi.config['nrk'].getAllEmployees()).filter(emp => emp.statusCode == 'E');
             
-            await Promise.all(
-              allVolunteers.map(async volunteer => {
-                strapi.log.debug('mnr: ' + volunteer.mnr);
-                volunteer.activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
-              })
-            );
+            for (const volunteer of allVolunteers) {
+              strapi.log.debug('mnr: ' + volunteer.mnr);
+              volunteer.activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
+            }
+
+            // await Promise.all(
+            //   allVolunteers.map(async volunteer => {
+            //     strapi.log.debug('mnr: ' + volunteer.mnr);
+            //     volunteer.activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
+            //   })
+            // );
 
             //strapi.log.debug(JSON.stringify(allVolunteers));
         }
