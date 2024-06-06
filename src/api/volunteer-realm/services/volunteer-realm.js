@@ -108,7 +108,7 @@ async function createOrUpdateRealm(realm, volunteerIds, strapiInstance) {
       populate: '*'
   })).results;
 
-  let strapiRealm = volunteerQueryResult.length > 0 ? volunteerQueryResult[0] : null;
+  let strapiRealm = volunteerRealmQueryResult.length > 0 ? volunteerRealmQueryResult[0] : null;
 
   const realmData = {
       name: realm.name,
