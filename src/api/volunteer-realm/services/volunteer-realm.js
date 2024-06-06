@@ -99,6 +99,8 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
               
         const allVolunteers = allEmps.filter(emp => emp.statusCode == 'E');
 
+        await strapi.config['nrk'].getEmployeeActivityAreaByMnr(allVolunteers[0].mnr);
+
         strapi.log.debug('volunteers: ' + JSON.stringify(allVolunteers));
       //  if(latestRealm == null ||
       //       (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago

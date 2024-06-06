@@ -70,6 +70,24 @@ module.exports = {
         // };
     },
 
+    async getEmployeeActivityAreaByMnr(mnr) {
+        const data = await makeNrkRequest({
+            'req': 'GETMATBereiche',
+            'mnr': mnr
+        });
+
+        strapi.log.debug('activity area for ' + mnr + ': ' + JSON.stringify(data));
+
+        if(data == null) return null;
+
+        // return {
+        //     mnr: mnr,
+        //     name: data.Vorname + ' ' + data.Nachname,
+        //     beginDateString: data["Status von"],
+        //     statusCode: data["Status Code"]
+        // };
+    },
+
     async getPictureByMnr(mnr) {
         const resultString = await makeNrkRequest({
             'req': 'MAPicture',
