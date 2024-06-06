@@ -10,15 +10,18 @@ const axios = require('axios').default;
 const realms = [
   {
     name: 'RKT',
-    activityAreas: ['KTW1', 'RTW1']
+    activityAreas: ['KTW1', 'RTW1'],
+    volunteers: []
   },
   {
     name: 'EAR',
-    activityAreas: ['ZE/ER']
+    activityAreas: ['ZE/ER'],
+    volunteers: []
   },
   {
     name: 'TÖT',
-    activityAreas: ['TÖT']
+    activityAreas: ['TÖT'],
+    volunteers: []
   }
 ];
 
@@ -117,22 +120,22 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
 
             let allVolunteers = (await strapi.config['nrk'].getAllEmployees()).filter(emp => emp.statusCode == 'E');
-            
-            for (const volunteer of allVolunteers) {
-              if(volunteer.mnr == '308796' || volunteer.mnr == '349922') {
-                strapi.log.debug('mnr: ' + volunteer.mnr);
+
+            await Promise.all(
+              allVolunteers.map(async volunteer => {
                 volunteer.activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
-              }
-            }
+              })
+            );
 
-            // await Promise.all(
-            //   allVolunteers.map(async volunteer => {
-            //     strapi.log.debug('mnr: ' + volunteer.mnr);
-            //     volunteer.activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
-            //   })
-            // );
+            realms.forEach(realm => {
+              allVolunteers.forEach(volunteer => {
+                if(volunteer.activityAreas.some(area => realm.activityAreas.includes(area['TB_ID'] && area.aktiv == 1))) {
+                  realm.volunteers.push(volunteer);
+                }
+              });
+            })
 
-            //strapi.log.debug(JSON.stringify(allVolunteers));
+            strapi.log.debug(JSON.stringify(realms));
         }
         //strapi.log.debug('volunteers: ' + JSON.stringify(allVolunteers));
       //  if(latestRealm == null ||
