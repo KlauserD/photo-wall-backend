@@ -129,6 +129,8 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
               })
             );
 
+            strapi.log.debug(JSON.stringify(allVolunteers));
+
             realms.forEach(realm => {
               allVolunteers.forEach(volunteer => {
                 strapi.log.debug('realm areas: ' + JSON.stringify(realm.activityAreas) + ' , emp areas: ', JSON.stringify(volunteer.activityAreas))
