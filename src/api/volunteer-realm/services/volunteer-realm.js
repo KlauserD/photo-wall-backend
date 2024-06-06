@@ -146,6 +146,11 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             // await strapi.config['nrk'].getEmployeeQualificationByMnr(distinctVolunteers[0].mnr);
 
             distinctVolunteers.map(async nrkVolunteer => {
+              strapi.log.debug(
+                await strapi.config['nrk'].getEmployeeQualificationByMnr(nrkVolunteer.mnr)
+
+              );
+
               // const strapiVolunteer = await createOrUpdateVolunteer(nrkVolunteer, strapi);
 
               // const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiVolunteer.mnr);
@@ -157,7 +162,6 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
               //     );
               // }
 
-              await strapi.config['nrk'].getEmployeeQualificationByMnr(nrkVolunteer.mnr);
             })
           }
         //strapi.log.debug('volunteers: ' + JSON.stringify(allVolunteers));

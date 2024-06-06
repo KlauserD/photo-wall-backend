@@ -53,21 +53,34 @@ module.exports = {
     },
 
     async getEmployeeQualificationByMnr(mnr) {
-        const data = await makeNrkRequest({
+        const qualifications = await makeNrkRequest({
             'req': 'MAQualifikationen',
             'mnr': mnr
         });
 
-        strapi.log.debug('qualification for id ' + mnr + ': ' + JSON.stringify(data));
+        //strapi.log.debug('qualification for id ' + mnr + ': ' + JSON.stringify(qualifications));
 
-        if(data == null) return null;
+        if(qualifications == null) return null;
+        
+        const rktQualifications = qualifications.filter(
+            qualification => qualification['qualifikation_id'] >= 1 && 
+            qualification['qualifikation_id'] <= 6
+        );
 
-        // return {
-        //     mnr: mnr,
-        //     name: data.Vorname + ' ' + data.Nachname,
-        //     beginDateString: data["Status von"],
-        //     statusCode: data["Status Code"]
-        // };
+        if(rktQualifications.length === 1) {
+            switch (rktQualifications[0]['qualifikation_id']) {
+                case 1: return 'Rettungssanitäter:in';
+                case 2: return 'Notfallsanitäter:in';
+                case 3: return 'NFS NKA';
+                case 4: return 'NFS NKV';
+                case 5: 
+                case 6: return 'NFS NKI';
+            
+                default: return null;
+            }
+        } else {
+            return null;
+        }
     },
 
     async getEmployeeActivityAreaByMnr(mnr) {
