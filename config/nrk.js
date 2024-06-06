@@ -80,6 +80,8 @@ module.exports = {
 
         if(data == null) return null;
 
+        return data;
+
         // return {
         //     mnr: mnr,
         //     name: data.Vorname + ' ' + data.Nachname,
