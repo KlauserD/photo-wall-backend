@@ -71,10 +71,10 @@ module.exports = {
             switch (rktQualifications[0]['qualifikation_id']) {
                 case 1: return 'Rettungs&shy;sanitäter:in';
                 case 2: return 'Notfall&shy;sanitäter:in';
-                case 3: return 'NFS NKA';
-                case 4: return 'NFS NKV';
+                case 3: return 'Notfall&shy;sanitäter:in NKA';
+                case 4: return 'Notfall&shy;sanitäter:in NKV';
                 case 5: 
-                case 6: return 'NFS NKI';
+                case 6: return 'Notfall&shy;sanitäter:in NKI';
             
                 default: return null;
             }
