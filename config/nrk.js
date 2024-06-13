@@ -69,8 +69,8 @@ module.exports = {
 
         if(rktQualifications.length === 1) {
             switch (rktQualifications[0]['qualifikation_id']) {
-                case 1: return 'Rettungssanitäter:in';
-                case 2: return 'Notfallsanitäter:in';
+                case 1: return 'RS';
+                case 2: return 'NFS';
                 case 3: return 'NFS NKA';
                 case 4: return 'NFS NKV';
                 case 5: 
