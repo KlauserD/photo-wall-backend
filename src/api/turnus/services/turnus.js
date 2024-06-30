@@ -87,31 +87,34 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                 }
             */
 
-            // const memberMnrs = await strapi.config['nrk'].getFilterMembers(30287);
+            // Problem: keine RKT/GSD Zugehörigkeit mit 'Taetigkeitsbereich'-API eruierbar.
+            // let allZdFsj = (await strapi.config['nrk'].getAllEmployees())
+            //   ?.filter(emp => emp.statusCode == 'Z' || emp.statusCode == 'FSJ');
 
+            // await Promise.all(
+            //     allZdFsj.map(async zdFsj => {
+            //     const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(zdFsj.mnr);
+
+            //     // strapi.log.debug('areas for id ' + zdFsj.mnr + ': ' + JSON.stringify(activityAreas));
+
+            //     zdFsj.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1)
+            // }));
+
+            // strapi.log.debug('zdfsj: ' + JSON.stringify(allZdFsj));
+
+
+
+            const memberMnrs = await strapi.config['nrk'].getFilterMembers(30287);
             // strapi.log.debug('turnus filter members: ' + JSON.stringify(memberMnrs));
 
-            let allZdFsj = (await strapi.config['nrk'].getAllEmployees())
-              ?.filter(emp => emp.statusCode == 'Z' || emp.statusCode == 'FSJ');
 
-            await Promise.all(
-                allZdFsj.map(async zdFsj => {
-                const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(zdFsj.mnr);
-                await strapi.config['nrk'].getEmployeeFunctionsByMnr(zdFsj.mnr);
 
-                strapi.log.debug('areas for id ' + zdFsj.mnr + ': ' + JSON.stringify(activityAreas));
 
-                zdFsj.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1)
-            }));
 
-            strapi.log.debug('zdfsj: ' + JSON.stringify(allZdFsj));
-
-            if(allZdFsj != null) {
+            if(memberMnrs != null) {
                 await Promise.all(
-                    allZdFsj
-                      .filter(zdFsj => zdFsj.activityAreas.map(area => area['TB_ID']).includes('RKT'))
-                      .map(async nrkEmp => {
-                        // const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
+                    memberMnrs.map(async mnr => {
+                        const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
     
                         
                         if(nrkEmp != null) {
