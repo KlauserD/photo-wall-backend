@@ -47,6 +47,7 @@ module.exports = {
             return {
                 mnr: nrkObject.Personalnr,
                 name: nrkObject.Vorname + ' ' + nrkObject.Nachname,
+                beginDateString: data["Status von"],
                 statusCode: nrkObject["Status Code"]
             }
         });

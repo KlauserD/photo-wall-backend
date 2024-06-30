@@ -87,14 +87,17 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                 }
             */
 
-            const memberMnrs = await strapi.config['nrk'].getFilterMembers(30287);
+            // const memberMnrs = await strapi.config['nrk'].getFilterMembers(30287);
 
-            strapi.log.debug('turnus filter members: ' + JSON.stringify(memberMnrs));
+            // strapi.log.debug('turnus filter members: ' + JSON.stringify(memberMnrs));
 
-            if(memberMnrs != null) {
+            let allZdFsj = (await strapi.config['nrk'].getAllEmployees())
+              ?.filter(emp => emp.statusCode == 'Z' || emp.statusCode == 'FSJ');
+
+            if(allZdFsj != null) {
                 await Promise.all(
-                    memberMnrs.map(async mnr => {
-                        const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
+                    allZdFsj.map(async nrkEmp => {
+                        // const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
     
                         if(nrkEmp != null) {
                             const beginDateSplitted = nrkEmp.beginDateString.split('-'); // "2024-01-02"
