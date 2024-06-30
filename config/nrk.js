@@ -38,8 +38,8 @@ module.exports = {
             'withguests': 0
         });
 
-        strapi.log.debug('all ma: ');
-        strapi.log.debug(JSON.stringify(data));
+        //strapi.log.debug('all ma: ');
+        //strapi.log.debug(JSON.stringify(data));
 
         if(data == null) return null;
 
@@ -48,7 +48,8 @@ module.exports = {
                 mnr: nrkObject.Personalnr,
                 name: nrkObject.Vorname + ' ' + nrkObject.Nachname,
                 beginDateString: data["Status von"],
-                statusCode: nrkObject["Status Code"]
+                statusCode: nrkObject["Status Code"],
+                ...nrkObject
             }
         });
     },
