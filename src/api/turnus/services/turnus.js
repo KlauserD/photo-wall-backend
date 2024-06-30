@@ -101,6 +101,8 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                 zdFsj.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1)
             }));
 
+            strapi.log.debug('zdfsj: ' + JSON.stringify(allZdFsj));
+
             if(allZdFsj != null) {
                 await Promise.all(
                     allZdFsj
