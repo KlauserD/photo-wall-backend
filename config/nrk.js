@@ -48,7 +48,8 @@ module.exports = {
                 mnr: nrkObject.Personalnr,
                 name: nrkObject.Vorname + ' ' + nrkObject.Nachname,
                 beginDateString: nrkObject["Status von"],
-                statusCode: nrkObject["Status Code"]
+                statusCode: nrkObject["Status Code"],
+                ...nrkObject
             }
         });
     },
