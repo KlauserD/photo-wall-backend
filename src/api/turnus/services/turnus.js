@@ -127,7 +127,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                     })
                 );
 
-                // strapi.log.debug(JSON.stringify(membersGroupedByTurnus));
+                strapi.log.debug(JSON.stringify(membersGroupedByTurnus));
 
                 await Promise.all(
                     strapiTurnuses.map(async turnus => {
