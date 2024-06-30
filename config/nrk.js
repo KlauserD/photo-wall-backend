@@ -104,6 +104,19 @@ module.exports = {
         // };
     },
 
+    async getEmployeeFunctionsByMnr(mnr) {
+        const data = await makeNrkRequest({
+            'req': 'GETMAFunktionen',
+            'mnr': mnr
+        });
+
+        strapi.log.debug('functions ' + mnr + ': ' + JSON.stringify(data));
+
+        if(data == null) return null;
+
+        return data;
+    },
+
     async getPictureByMnr(mnr) {
         const resultString = await makeNrkRequest({
             'req': 'MAPicture',

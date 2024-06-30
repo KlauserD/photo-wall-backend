@@ -97,6 +97,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
             await Promise.all(
                 allZdFsj.map(async zdFsj => {
                 const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(zdFsj.mnr);
+                await strapi.config['nrk'].getEmployeeFunctionsByMnr(zdFsj.mnr);
 
                 strapi.log.debug('areas for id ' + zdFsj.mnr + ': ' + JSON.stringify(activityAreas));
 
