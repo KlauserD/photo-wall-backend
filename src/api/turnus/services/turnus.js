@@ -77,7 +77,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
         });
               
        if(latestTurnus == null ||
-        (new Date() - new Date(latestTurnus.updatedAt)) / 36e5 > 0) { // last updated longer than 12h ago
+        (new Date() - new Date(latestTurnus.updatedAt)) / 36e5 > 12) { // last updated longer than 12h ago
             let membersGroupedByTurnus = {};
             /* 
                 {
@@ -127,7 +127,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                     })
                 );
 
-                strapi.log.debug(JSON.stringify(membersGroupedByTurnus));
+                //strapi.log.debug(JSON.stringify(membersGroupedByTurnus));
 
                 await Promise.all(
                     strapiTurnuses.map(async turnus => {
