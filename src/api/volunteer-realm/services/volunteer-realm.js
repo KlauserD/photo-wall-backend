@@ -187,25 +187,43 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
               );
 
               // add realms to strapi DB and relate to volunteers
-              await Promise.all(
-                realms.map(async realm => {
-                  const realmData = {
-                    name: realm.name,
-                    volunteers: realm.volunteers.map(volunteer => volunteer.strapiId)
-                  }
+              for (const realm of realms) {
+                const realmData = {
+                  name: realm.name,
+                  volunteers: realm.volunteers.map(volunteer => volunteer.strapiId)
+                }
 
-                  // find existing realm in DB
-                  const volunteerRealmQueryResult = (await super.find({
-                    filters: {
-                        name: realm.name
-                    },
-                    populate: '*'
-                  })).results;
-                  let strapiRealm = volunteerRealmQueryResult.length > 0 ? volunteerRealmQueryResult[0] : null;
+                // find existing realm in DB
+                const volunteerRealmQueryResult = (await super.find({
+                  filters: {
+                      name: realm.name
+                  },
+                  populate: '*'
+                })).results;
+                let strapiRealm = volunteerRealmQueryResult.length > 0 ? volunteerRealmQueryResult[0] : null;
 
-                  await createOrUpdateRealm(strapiRealm, realmData, strapi);
-                })
-              );
+                await createOrUpdateRealm(strapiRealm, realmData, strapi);
+              }
+
+              // await Promise.all(
+              //   realms.map(async realm => {
+              //     const realmData = {
+              //       name: realm.name,
+              //       volunteers: realm.volunteers.map(volunteer => volunteer.strapiId)
+              //     }
+
+              //     // find existing realm in DB
+              //     const volunteerRealmQueryResult = (await super.find({
+              //       filters: {
+              //           name: realm.name
+              //       },
+              //       populate: '*'
+              //     })).results;
+              //     let strapiRealm = volunteerRealmQueryResult.length > 0 ? volunteerRealmQueryResult[0] : null;
+
+              //     await createOrUpdateRealm(strapiRealm, realmData, strapi);
+              //   })
+              // );
 
             }
 
