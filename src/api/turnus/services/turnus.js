@@ -98,6 +98,8 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                 allZdFsj.map(async zdFsj => {
                 const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(zdFsj.mnr);
 
+                strapi.log.debug('areas for id ' + zdFsj.mnr + ': ' + JSON.stringify(activityAreas));
+
                 zdFsj.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1)
             }));
 
