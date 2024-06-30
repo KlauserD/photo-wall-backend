@@ -229,6 +229,6 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
 
           }
 
-        return await super.find(...args);
+        return { results: strapiRealms, pagination };
     }
 }));
