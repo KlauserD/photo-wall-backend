@@ -94,9 +94,18 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
             let allZdFsj = (await strapi.config['nrk'].getAllEmployees())
               ?.filter(emp => emp.statusCode == 'Z' || emp.statusCode == 'FSJ');
 
+            await Promise.all(
+                allZdFsj.map(async zdFsj => {
+                const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(zdFsj.mnr);
+
+                zdFsj.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1)
+            }));
+
             if(allZdFsj != null) {
                 await Promise.all(
-                    allZdFsj.map(async nrkEmp => {
+                    allZdFsj
+                      .filter(zdFsj => zdFsj.activityAreas.map(area => area['TB_ID']).includes('RKT'))
+                      .map(async nrkEmp => {
                         // const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
     
                         
