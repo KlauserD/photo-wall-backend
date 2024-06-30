@@ -20,7 +20,7 @@ module.exports = {
             'mnr': mnr
         });
 
-        // strapi.log.debug('nrk emp for id ' + mnr + ': ' + JSON.stringify(data));
+        strapi.log.debug('nrk emp for id ' + mnr + ': ' + JSON.stringify(data));
 
         if(data == null) return null;
 
@@ -48,8 +48,7 @@ module.exports = {
                 mnr: nrkObject.Personalnr,
                 name: nrkObject.Vorname + ' ' + nrkObject.Nachname,
                 beginDateString: nrkObject["Status von"],
-                statusCode: nrkObject["Status Code"],
-                ...nrkObject
+                statusCode: nrkObject["Status Code"]
             }
         });
     },
