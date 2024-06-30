@@ -186,8 +186,6 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                 })
               );
 
-              const updatedRealms = [];
-
               // add realms to strapi DB and relate to volunteers
               for (const realm of realms) {
                 const realmData = {
@@ -205,7 +203,6 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                 let strapiRealm = volunteerRealmQueryResult.length > 0 ? volunteerRealmQueryResult[0] : null;
 
                 const updatedRealm = await createOrUpdateRealm(strapiRealm, realmData, strapi);
-                updatedRealms.push(updatedRealm);
               }
 
               return await super.find(...args);
