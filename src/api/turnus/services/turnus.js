@@ -117,11 +117,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                         const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
     
                         
-                        if(nrkEmp != null) {
-                            if(nrkEmp.beginDateString == null) {
-                                strapi.log.debug('nrk emp: ' + JSON.stringify(nrkEmp));
-
-                            }
+                        if(nrkEmp != null && nrkEmp.statusCode != null) {
                             const beginDateSplitted = nrkEmp.beginDateString.split('-'); // "2024-01-02"
                             const selector = parseInt(beginDateSplitted[0]) + '/' + parseInt(beginDateSplitted[1]); // 2024/1
         
