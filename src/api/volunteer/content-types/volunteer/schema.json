@@ -37,6 +37,12 @@
       "relation": "manyToMany",
       "target": "api::volunteer-realm.volunteer-realm",
       "mappedBy": "volunteers"
+    },
+    "department": {
+      "type": "string"
+    },
+    "gender": {
+      "type": "string"
     }
   }
 }
