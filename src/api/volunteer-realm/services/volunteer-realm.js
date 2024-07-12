@@ -10,7 +10,7 @@ const axios = require('axios').default;
 const declaredRealms = [
   {
     name: 'RKT',
-    activityAreas: ['KTW1', 'RTW1', 'FBB']
+    activityAreas: ['KTW1', 'RTW1', 'FBKTW']
   },
   {
     name: 'EAR',
