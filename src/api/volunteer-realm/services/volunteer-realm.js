@@ -139,7 +139,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             let allVolunteers = (await strapi.config['nrk'].getAllEmployees())
               ?.filter(emp => emp.statusCode != 'H' && emp.statusCode != 'Z' && emp.statusCode != 'FSJ');
 
-            strapi.log.debug(JSON.stringify(allVolunteers));
+            //strapi.log.debug(JSON.stringify(allVolunteers));
 
             if(allVolunteers != null) {
               await Promise.all(
@@ -179,7 +179,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                   if(nrkVolunteer.qualification != null && ['m', 'w'].includes(nrkVolunteer.gender)) {
                     nrkVolunteer.qualification = nrkVolunteer.qualification.replace(
                       ':in',
-                      nrkVolunteer.qualification == 'm' ? '' : 'in'
+                      nrkVolunteer.gender == 'm' ? '' : 'in'
                     );
                   }
 
