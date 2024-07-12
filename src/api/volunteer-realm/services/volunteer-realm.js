@@ -134,7 +134,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         // const allVolunteers = allEmps.filter(emp => emp.statusCode == 'E');
 
         if(latestRealm == null ||
-            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 0.01 ) { // last updated longer than 12h ago
+            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
 
             let allVolunteers = (await strapi.config['nrk'].getAllEmployees())
               ?.filter(emp => emp.statusCode != 'H' && emp.statusCode != 'Z' && emp.statusCode != 'FSJ');
@@ -168,16 +168,8 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
               let distinctVolunteers = [];
               realms.forEach(realm => distinctVolunteers.push(...realm.volunteers));
               strapi.log.debug('length before distinct: ' + distinctVolunteers.length);
-              strapi.log.debug('fuchs andi anzahl in distinct: ' + distinctVolunteers.filter(emp => emp.mnr == 96604).length)
-              
               distinctVolunteers = distinctVolunteers.filter((item, index) => distinctVolunteers.indexOf(item) === index);
               strapi.log.debug('length after distinct: ' + distinctVolunteers.length);
-              strapi.log.debug('fuchs andi anzahl in distinct: ' + distinctVolunteers.filter(emp => emp.mnr == 96604).length)
-              
-              strapi.log.debug('fuchs andis in realms:');
-              realms.forEach(realm => {
-                strapi.log.debug('realm: ' + realm.name + ', andi: ' + realm.volunteers.filter(emp => emp.mnr == 96604).length)
-              });
 
               // add all volunteers to strapi DB
               await Promise.all(
@@ -204,11 +196,6 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                   }
                 })
               );
-
-              strapi.log.debug('fuchs andis in realms nach abspeichern:');
-              realms.forEach(realm => {
-                strapi.log.debug('realm: ' + realm.name + ', andi: ' + realm.volunteers.filter(emp => emp.mnr == 96604).length)
-              });
 
               // add realms to strapi DB and relate to volunteers
               for (const realm of realms) {
