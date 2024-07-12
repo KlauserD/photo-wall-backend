@@ -176,7 +176,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                 distinctVolunteers.map(async nrkVolunteer => {
                   nrkVolunteer.qualification = await strapi.config['nrk'].getEmployeeQualificationByMnr(nrkVolunteer.mnr)
 
-                  if(['m', 'w'].includes(nrkVolunteer.gender)) {
+                  if(nrkVolunteer != null && ['m', 'w'].includes(nrkVolunteer.gender)) {
                     nrkVolunteer.qualification = nrkVolunteer.qualification.replace(
                       ':in',
                       nrkVolunteer.qualification == 'm' ? '' : 'in'
