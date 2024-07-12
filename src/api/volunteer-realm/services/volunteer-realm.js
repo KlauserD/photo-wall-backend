@@ -134,7 +134,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         // const allVolunteers = allEmps.filter(emp => emp.statusCode == 'E');
 
         if(latestRealm == null ||
-            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
+            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 0.01 ) { // last updated longer than 12h ago
 
             let allVolunteers = (await strapi.config['nrk'].getAllEmployees())
               ?.filter(emp => emp.statusCode != 'H' && emp.statusCode != 'Z' && emp.statusCode != 'FSJ');
@@ -168,8 +168,12 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
               let distinctVolunteers = [];
               realms.forEach(realm => distinctVolunteers.push(...realm.volunteers));
               strapi.log.debug('length before distinct: ' + distinctVolunteers.length);
+              strapi.log.debug('fuchs andi anzahl in distinct: ', distinctVolunteers.filter(emp => emp.mnr == 96694).length)
+              
               distinctVolunteers = distinctVolunteers.filter((item, index) => distinctVolunteers.indexOf(item) === index);
               strapi.log.debug('length after distinct: ' + distinctVolunteers.length);
+              strapi.log.debug('fuchs andi anzahl in distinct: ', distinctVolunteers.filter(emp => emp.mnr == 96694).length)
+              strapi.log.debug('fuchs andi anzahl in realm: ', realm.volunteers.filter(emp => emp.mnr == 96694).length)
 
               // add all volunteers to strapi DB
               await Promise.all(
@@ -196,6 +200,8 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                   }
                 })
               );
+
+              strapi.log.debug('fuchs andi nach strapi abspeichern: ', JSON.stringify(realm.volunteers.filter(emp => emp.mnr == 96694)))
 
               // add realms to strapi DB and relate to volunteers
               for (const realm of realms) {
