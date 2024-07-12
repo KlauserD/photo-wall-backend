@@ -168,12 +168,16 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
               let distinctVolunteers = [];
               realms.forEach(realm => distinctVolunteers.push(...realm.volunteers));
               strapi.log.debug('length before distinct: ' + distinctVolunteers.length);
-              strapi.log.debug('fuchs andi anzahl in distinct: ', distinctVolunteers.filter(emp => emp.mnr == 96694).length)
+              strapi.log.debug('fuchs andi anzahl in distinct: ', distinctVolunteers.filter(emp => emp.mnr == 96604).length)
               
               distinctVolunteers = distinctVolunteers.filter((item, index) => distinctVolunteers.indexOf(item) === index);
               strapi.log.debug('length after distinct: ' + distinctVolunteers.length);
-              strapi.log.debug('fuchs andi anzahl in distinct: ', distinctVolunteers.filter(emp => emp.mnr == 96694).length)
-              strapi.log.debug('fuchs andi anzahl in realm: ', realm.volunteers.filter(emp => emp.mnr == 96694).length)
+              strapi.log.debug('fuchs andi anzahl in distinct: ', distinctVolunteers.filter(emp => emp.mnr == 96604).length)
+              
+              strapi.log.debug('fuchs andis in realms:');
+              realms.forEach(realm => {
+                strapi.log.debug('realm: ' + realm.name + ', andi: ' + realm.volunteers.filter(emp => emp.mnr == 96604).length)
+              });
 
               // add all volunteers to strapi DB
               await Promise.all(
@@ -201,7 +205,10 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                 })
               );
 
-              strapi.log.debug('fuchs andi nach strapi abspeichern: ', JSON.stringify(realm.volunteers.filter(emp => emp.mnr == 96694)))
+              strapi.log.debug('fuchs andis in realms nach abspeichern:');
+              realms.forEach(realm => {
+                strapi.log.debug('realm: ' + realm.name + ', andi: ' + realm.volunteers.filter(emp => emp.mnr == 96604).length)
+              });
 
               // add realms to strapi DB and relate to volunteers
               for (const realm of realms) {
