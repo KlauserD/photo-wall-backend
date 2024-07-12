@@ -48,7 +48,7 @@ module.exports = {
                 mnr: nrkObject.Personalnr,
                 name: nrkObject.Vorname + ' ' + nrkObject.Nachname,
                 gender: nrkObject.Geschlecht,
-                department: nrkObject["Dienststelle Name"],
+                department: nrkObject["Dienststelle Name"] == 'St. Leonhard-Ruprechtshofen' ? 'St. Leonhard' : nrkObject["Dienststelle Name"],
                 beginDateString: nrkObject["Status von"],
                 statusCode: nrkObject["Status Code"]
             }
