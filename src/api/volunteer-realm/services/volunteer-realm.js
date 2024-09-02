@@ -139,7 +139,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         // const allVolunteers = allEmps.filter(emp => emp.statusCode == 'E');
 
         if(latestRealm == null ||
-            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 0.01 ) { // last updated longer than 12h ago
+            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
 
             let allVolunteers = (await strapi.config['nrk'].getAllEmployees())
               ?.filter(emp => emp.statusCode != 'H' && emp.statusCode != 'Z' && emp.statusCode != 'FSJ');
@@ -151,16 +151,16 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                 allVolunteers.map(async volunteer => {
                   const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
 
-                  if(volunteer.name == 'Alois Porsch') {
-                    strapi.log.debug(JSON.stringify(activityAreas));
-                  }
+                  // if(volunteer.name == 'Alois Porsch') {
+                  //   strapi.log.debug(JSON.stringify(activityAreas));
+                  // }
 
                   volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1)
                 })
               );
 
 
-              strapi.log.debug(JSON.stringify(allVolunteers.filter(vol => vol.name == 'Alois Porsch')));
+              // strapi.log.debug(JSON.stringify(allVolunteers.filter(vol => vol.name == 'Alois Porsch')));
 
               const realms = [];
               declaredRealms.forEach(declaredRealm => {
@@ -172,7 +172,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
               realms.forEach(realm => {
                 allVolunteers.forEach(volunteer => {
                   if(volunteer.activityAreas.some(volunteerArea => realm.activityAreas.includes(volunteerArea['TB_ID']))) {
-                    strapi.log.debug('pushing volunteer ' + volunteer.name + ' to ' + realm.name);
+                    // strapi.log.debug('pushing volunteer ' + volunteer.name + ' to ' + realm.name);
                     realm.volunteers.push(volunteer);
                   }
                 });
