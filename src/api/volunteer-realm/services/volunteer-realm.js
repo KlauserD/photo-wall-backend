@@ -154,6 +154,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                   volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1)
                 })
               );
+              
 
               strapi.log.debug(JSON.stringify(allVolunteers.filter(vol => vol.activityAreas.length > 0)));
 
