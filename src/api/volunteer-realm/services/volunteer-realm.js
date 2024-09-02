@@ -151,6 +151,10 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                 allVolunteers.map(async volunteer => {
                   const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
 
+                  if(volunteer.name == 'Alois Porsch') {
+                    strapi.log.debug(activityAreas);
+                  }
+
                   volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1)
                 })
               );
