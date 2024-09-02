@@ -110,7 +110,7 @@ async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
       });
   } else {
       // strapi.log.debug('existing realm: ' + JSON.stringify(existingRealm));
-      strapi.log.debug('realm data: ' + JSON.stringify(realmData));
+      // strapi.log.debug('realm data: ' + JSON.stringify(realmData));
       await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
           data: realmData,
           populate: '*'
@@ -201,6 +201,9 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                   }
                 })
               );
+
+              strapi.log.debug('realms: ' + JSON.stringify(realms));
+
 
               // add realms to strapi DB and relate to volunteers
               for (const realm of realms) {
