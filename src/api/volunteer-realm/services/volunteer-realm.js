@@ -106,6 +106,8 @@ async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
           populate: '*'
       });
   } else {
+      strapi.log.debug('existing realm: ' + JSON.stringify(existingRealm));
+      strapi.log.debug('realm data: ' + JSON.stringify(realmData));
       await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
           data: realmData,
           populate: '*'
