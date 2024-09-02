@@ -144,7 +144,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             let allVolunteers = (await strapi.config['nrk'].getAllEmployees())
               ?.filter(emp => emp.statusCode != 'H' && emp.statusCode != 'Z' && emp.statusCode != 'FSJ');
 
-            //strapi.log.debug(JSON.stringify(allVolunteers));
+            // strapi.log.debug(JSON.stringify(allVolunteers));
 
             if(allVolunteers != null) {
               await Promise.all(
@@ -154,6 +154,8 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                   volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1)
                 })
               );
+
+              strapi.log.debug(JSON.stringify(allVolunteers.filter(vol => vol.activityAreas.length > 0)));
 
               const realms = [];
               declaredRealms.forEach(declaredRealm => {
