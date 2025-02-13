@@ -101,6 +101,7 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
 
 async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
   strapi.log.debug('realm data: ' + JSON.stringify(realmData));
+  strapi.log.debug('existing realm: ' + JSON.stringify(existingRealm));
 
 
   if(existingRealm == null) {
