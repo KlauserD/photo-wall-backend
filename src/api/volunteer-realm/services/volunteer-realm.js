@@ -19,6 +19,10 @@ const declaredRealms = [
   {
     name: 'TÖT',
     activityAreas: ['TÖTF', 'TÖTTAL', 'TÖTK', 'TÖTW']
+  },
+  {
+    name: 'test',
+    activityAreas: []
   }
 ];
 
