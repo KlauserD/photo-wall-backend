@@ -140,7 +140,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         // const allVolunteers = allEmps.filter(emp => emp.statusCode == 'E');
 
         if(latestRealm == null ||
-            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
+            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 0.05 ) { // last updated longer than 12h ago
 
             let allVolunteers = (await strapi.config['nrk'].getAllEmployees())
               ?.filter(emp => emp.statusCode != 'H' && emp.statusCode != 'Z' && emp.statusCode != 'FSJ');
