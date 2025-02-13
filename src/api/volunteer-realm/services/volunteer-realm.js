@@ -225,7 +225,9 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
 
                 const realmData = {
                   name: realm.name,
-                  volunteers: volunteerIds
+                  volunteers: {
+                    set: volunteerIds
+                  }
                 }
 
                 // find existing realm in DB
