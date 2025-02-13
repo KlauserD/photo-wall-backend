@@ -111,14 +111,14 @@ async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
   if(existingRealm == null) {
     existingRealm = await strapiInstance.service('api::volunteer-realm.volunteer-realm').create({
           data: realmData,
-          populate: '*'
+          populate: 'volunteers'
       });
   } else {
       // strapi.log.debug('existing realm: ' + JSON.stringify(existingRealm));
       // strapi.log.debug('realm data: ' + JSON.stringify(realmData));
       await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
           data: realmData,
-          populate: '*'
+          populate: 'volunteers'
         });
   }
 
@@ -233,7 +233,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                   filters: {
                       name: realm.name
                   },
-                  populate: '*'
+                  populate: 'volunteers'
                 })).results;
                 let strapiRealm = volunteerRealmQueryResult.length > 0 ? volunteerRealmQueryResult[0] : null;
 
