@@ -18,7 +18,8 @@ const declaredRealms = [
   },
   {
     name: 'TÖT',
-    activityAreas: ['TÖTF', 'TÖTTAL', 'TÖTK', 'TÖTW']
+    activityAreas: ['TÖT']
+    // activityAreas: ['TÖTF', 'TÖTTAL', 'TÖTK', 'TÖTW']
   },
   {
     name: 'test',
@@ -225,7 +226,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
 
                 const realmData = {
                   name: realm.name,
-                  volunteers: volunteerIds.length == 0 ? null : volunteerIds
+                  volunteers: volunteerIds
                 }
 
                 // find existing realm in DB
