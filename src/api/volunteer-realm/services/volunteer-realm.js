@@ -18,7 +18,7 @@ const declaredRealms = [
   },
   {
     name: 'TÖT',
-    activityAreas: ['TÖT']
+    activityAreas: ['TÖTF', 'TÖTTAL', 'TÖTK', 'TÖTW']
   }
 ];
 
@@ -217,9 +217,11 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
 
               // add realms to strapi DB and relate to volunteers
               for (const realm of realms) {
+                const volunteerIds = realm.volunteers.map(volunteer => volunteer.strapiId);
+
                 const realmData = {
                   name: realm.name,
-                  volunteers: realm.volunteers.map(volunteer => volunteer.strapiId)
+                  volunteers: volunteerIds.length == 0 ? null : volunteerIds
                 }
 
                 // find existing realm in DB
