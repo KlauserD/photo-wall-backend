@@ -114,21 +114,9 @@ async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
           populate: 'volunteers'
       });
   } else {
-      // strapi.log.debug('existing realm: ' + JSON.stringify(existingRealm));
-
-      if(realmData.volunteers.length == 0) {
-        // strapi.log.debug('realm data: ' + JSON.stringify(realmData));
-
-        await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
-          data: {
-            volunteers: []
-          }
-        });
-      } else {
-        await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
-          data: realmData
-        });
-      }
+    await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
+      data: realmData
+    });
   }
 
   return existingRealm;
@@ -167,6 +155,11 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
 
                   if(volunteer.name == 'Alois Porsch') {
                     strapi.log.debug('alois porsch');
+                    strapi.log.debug(JSON.stringify(activityAreas));
+                  }
+
+                  if(volunteer.id == 288) {
+                    strapi.log.debug(volunteer.name);
                     strapi.log.debug(JSON.stringify(activityAreas));
                   }
 
