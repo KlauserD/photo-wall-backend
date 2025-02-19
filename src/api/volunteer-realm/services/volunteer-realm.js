@@ -18,12 +18,8 @@ const declaredRealms = [
   },
   {
     name: 'TÖT',
-    activityAreas: ['TÖT']
-    // activityAreas: ['TÖTF', 'TÖTTAL', 'TÖTK', 'TÖTW']
-  },
-  {
-    name: 'test',
-    activityAreas: []
+    // activityAreas: ['TÖT']
+    activityAreas: ['TÖTF', 'TÖTTAL', 'TÖTK', 'TÖTW']
   }
 ];
 
@@ -114,9 +110,11 @@ async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
           populate: 'volunteers'
       });
   } else {
-    await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
-      data: realmData
-    });
+    if(realmData.volunteers.length > 0) {
+      await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
+        data: realmData
+      });
+    }
   }
 
   return existingRealm;
@@ -153,18 +151,18 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                 allVolunteers.map(async volunteer => {
                   const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
 
-                  if(volunteer.mnr == 96604) {
-                    strapi.log.debug('maria funcs');
-                    strapi.log.debug(JSON.stringify(activityAreas));
-                    const funcs = await strapi.config['nrk'].getUnits(volunteer.mnr);
-                    strapi.log.debug(JSON.stringify(funcs));
-                  }
+                  // if(volunteer.mnr == 96604) {
+                  //   strapi.log.debug('maria funcs');
+                  //   strapi.log.debug(JSON.stringify(activityAreas));
+                  //   const funcs = await strapi.config['nrk'].getUnits(volunteer.mnr);
+                  //   strapi.log.debug(JSON.stringify(funcs));
+                  // }
 
-                  if(volunteer.mnr == 9117) {
-                    strapi.log.debug(volunteer.name);
-                    const funcs = await strapi.config['nrk'].getUnits(volunteer.mnr);
-                    strapi.log.debug(JSON.stringify(funcs));
-                  }
+                  // if(volunteer.mnr == 9117) {
+                  //   strapi.log.debug(volunteer.name);
+                  //   const funcs = await strapi.config['nrk'].getUnits(volunteer.mnr);
+                  //   strapi.log.debug(JSON.stringify(funcs));
+                  // }
 
                   volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1)
                 })
