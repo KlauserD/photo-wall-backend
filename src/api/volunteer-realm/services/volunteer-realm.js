@@ -105,7 +105,7 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
 }
 
 async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
-  strapi.log.debug('realm data: ' + JSON.stringify(realmData));
+  // strapi.log.debug('realm data: ' + JSON.stringify(realmData));
   // strapi.log.debug('existing realm: ' + JSON.stringify(existingRealm));
 
 
@@ -116,9 +116,10 @@ async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
       });
   } else {
       // strapi.log.debug('existing realm: ' + JSON.stringify(existingRealm));
-      // strapi.log.debug('realm data: ' + JSON.stringify(realmData));
 
       if(realmData.volunteers.length == 0) {
+        strapi.log.debug('realm data: ' + JSON.stringify(realmData));
+
         await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
           data: {
             name: realmData.name,
