@@ -156,7 +156,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                   if(volunteer.name == 'Maria Fuchs') {
                     strapi.log.debug('maria funcs');
                     strapi.log.debug(JSON.stringify(activityAreas));
-                    const funcs = await strapi.config['nrk'].getEmployeeFunctionsByMnr(volunteer.mnr);
+                    const funcs = await strapi.config['nrk'].getEmployeeByMnr(volunteer.mnr);
                     strapi.log.debug(JSON.stringify(funcs));
                   }
 
