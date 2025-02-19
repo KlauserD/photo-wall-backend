@@ -109,6 +109,9 @@ async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
   strapi.log.debug('existing realm: ' + JSON.stringify(existingRealm));
   strapi.log.debug('existing volunteers: ' + JSON.stringify(existingRealm.volunteers.map(v => v.id)));
 
+  const ids = existingRealm.volunteers.map(v => v.id);
+  ids.splice(1,1);
+
 
   if(existingRealm == null) {
     existingRealm = await strapiInstance.service('api::volunteer-realm.volunteer-realm').create({
@@ -124,7 +127,7 @@ async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
         await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
           data: {
             volunteers: {
-              disconnect: existingRealm.volunteers.map(v => v.id)
+              disconnect: ids
             }
           }
         });
