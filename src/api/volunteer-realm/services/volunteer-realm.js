@@ -158,7 +158,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                     strapi.log.debug(JSON.stringify(activityAreas));
                   }
 
-                  if(volunteer.id == 288) {
+                  if(volunteer.mnr == 9117) {
                     strapi.log.debug(volunteer.name);
                     strapi.log.debug(JSON.stringify(activityAreas));
                   }
