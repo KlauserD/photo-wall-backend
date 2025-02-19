@@ -105,7 +105,7 @@ module.exports = {
             'mnr': mnr
         });
 
-        // strapi.log.debug('activity area for ' + mnr + ': ' + JSON.stringify(data));
+        strapi.log.debug('functions for ' + mnr + ': ' + JSON.stringify(data));
 
         if(data == null) return null;
 
