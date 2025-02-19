@@ -162,7 +162,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
 
                   if(volunteer.mnr == 9117) {
                     strapi.log.debug(volunteer.name);
-                    const funcs = await strapi.config['nrk'].getEmployeeFunctionsByMnr(volunteer.mnr);
+                    const funcs = await strapi.config['nrk'].getUnits(volunteer.mnr);
                     strapi.log.debug(JSON.stringify(funcs));
                   }
 
