@@ -246,7 +246,12 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                   filters: {
                       name: realm.name
                   },
-                  populate: ['id']
+                  populate: {
+                    volunteers: true,
+                    repeatableComponent: {
+                      fields: ['id']
+                    },
+                  }
                 })).results;
                 let strapiRealm = volunteerRealmQueryResult.length > 0 ? volunteerRealmQueryResult[0] : null;
 
