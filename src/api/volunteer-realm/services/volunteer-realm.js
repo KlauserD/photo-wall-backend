@@ -105,8 +105,8 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
 }
 
 async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
-  // strapi.log.debug('realm data: ' + JSON.stringify(realmData));
-  // strapi.log.debug('existing realm: ' + JSON.stringify(existingRealm));
+  strapi.log.debug('realm data: ' + JSON.stringify(realmData));
+  strapi.log.debug('existing realm: ' + JSON.stringify(existingRealm));
 
 
   if(existingRealm == null) {
@@ -118,13 +118,13 @@ async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
       // strapi.log.debug('existing realm: ' + JSON.stringify(existingRealm));
 
       if(realmData.volunteers.length == 0) {
-        strapi.log.debug('realm data: ' + JSON.stringify(realmData));
+        // strapi.log.debug('realm data: ' + JSON.stringify(realmData));
 
         await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
           data: {
             name: realmData.name,
             volunteers: {
-              disconnect: '*'
+              disconnect: [existingRealm.volunteers]
             }
           }
         });
@@ -229,7 +229,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                 })
               );
 
-              strapi.log.debug('realms: ' + JSON.stringify(realms));
+              // strapi.log.debug('realms: ' + JSON.stringify(realms));
 
 
               // add realms to strapi DB and relate to volunteers
@@ -245,8 +245,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                 const volunteerRealmQueryResult = (await super.find({
                   filters: {
                       name: realm.name
-                  },
-                  populate: 'volunteers'
+                  }
                 })).results;
                 let strapiRealm = volunteerRealmQueryResult.length > 0 ? volunteerRealmQueryResult[0] : null;
 
