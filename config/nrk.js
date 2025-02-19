@@ -97,13 +97,19 @@ module.exports = {
         if(data == null) return null;
 
         return data;
+    },
 
-        // return {
-        //     mnr: mnr,
-        //     name: data.Vorname + ' ' + data.Nachname,
-        //     beginDateString: data["Status von"],
-        //     statusCode: data["Status Code"]
-        // };
+    async getEmployeeFunctionsByMnr(mnr) {
+        const data = await makeNrkRequest({
+            'req': 'GETMAFunktionen',
+            'mnr': mnr
+        });
+
+        // strapi.log.debug('activity area for ' + mnr + ': ' + JSON.stringify(data));
+
+        if(data == null) return null;
+
+        return data;
     },
 
     async getPictureByMnr(mnr) {
