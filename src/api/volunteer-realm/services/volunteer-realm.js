@@ -125,7 +125,7 @@ async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
           data: {
             name: realmData.name,
             volunteers: {
-              disconnect: [existingRealm.volunteers]
+              disconnect: existingRealm.volunteers.map(v => v.id)
             }
           }
         });
