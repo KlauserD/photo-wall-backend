@@ -107,6 +107,7 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
 async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
   strapi.log.debug('realm data: ' + JSON.stringify(realmData));
   strapi.log.debug('existing realm: ' + JSON.stringify(existingRealm));
+  strapi.log.debug('existing volunteers: ' + JSON.stringify(existingRealm.volunteers.map(v => v.id)));
 
 
   if(existingRealm == null) {
@@ -246,12 +247,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                   filters: {
                       name: realm.name
                   },
-                  populate: {
-                    volunteers: true,
-                    repeatableComponent: {
-                      fields: ['id']
-                    },
-                  }
+                  populate: 'volunteers'
                 })).results;
                 let strapiRealm = volunteerRealmQueryResult.length > 0 ? volunteerRealmQueryResult[0] : null;
 
