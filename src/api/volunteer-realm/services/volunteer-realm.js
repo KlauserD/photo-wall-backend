@@ -121,7 +121,7 @@ async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
 
         await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
           data: {
-            volunteers: [288]
+            volunteers: []
           }
         });
       } else {
