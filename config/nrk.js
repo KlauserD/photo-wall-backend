@@ -102,13 +102,13 @@ module.exports = {
         return data;
     },
 
-    async getEmployeeFunctionsByMnr(mnr) {
+    async getUnits(mnr) {
         const data = await makeNrkRequest({
-            'req': 'GETMAFunktionen',
+            'req': 'GetMAEinheiten',
             'mnr': mnr
         });
 
-        strapi.log.debug('functions for ' + mnr + ': ' + JSON.stringify(data));
+        strapi.log.debug('unit for ' + mnr + ': ' + JSON.stringify(data));
 
         if(data == null) return null;
 
