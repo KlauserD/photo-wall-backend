@@ -153,7 +153,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                 allVolunteers.map(async volunteer => {
                   const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
 
-                  if(volunteer.mnr == 87100) {
+                  if(volunteer.mnr == 96604) {
                     strapi.log.debug('maria funcs');
                     strapi.log.debug(JSON.stringify(activityAreas));
                     const funcs = await strapi.config['nrk'].getUnits(volunteer.mnr);
