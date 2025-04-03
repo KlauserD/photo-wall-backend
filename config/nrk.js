@@ -102,18 +102,18 @@ module.exports = {
         return data;
     },
 
-    async getUnits(mnr) {
-        const data = await makeNrkRequest({
-            'req': 'GetMAEinheiten',
-            'mnr': mnr
-        });
+    // async getUnits(mnr) {
+    //     const data = await makeNrkRequest({
+    //         'req': 'GetMAEinheiten',
+    //         'mnr': mnr
+    //     });
 
-        strapi.log.debug('unit for ' + mnr + ': ' + JSON.stringify(data));
+    //     strapi.log.debug('unit for ' + mnr + ': ' + JSON.stringify(data));
 
-        if(data == null) return null;
+    //     if(data == null) return null;
 
-        return data;
-    },
+    //     return data;
+    // },
 
     async getPictureByMnr(mnr) {
         const resultString = await makeNrkRequest({

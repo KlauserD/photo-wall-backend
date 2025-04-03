@@ -19,7 +19,7 @@ const declaredRealms = [
   {
     name: 'TÖT',
     // activityAreas: ['TÖT']
-    activityAreas: ['TÖTF', 'TÖTTAL', 'TÖTK', 'TÖTW']
+    activityAreas: ['TÖTF', 'TÖTTAL', 'TÖTK', 'TÖTW', 'TÖTTltg']
   }
 ];
 
@@ -139,7 +139,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         // const allVolunteers = allEmps.filter(emp => emp.statusCode == 'E');
 
         if(latestRealm == null ||
-            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 0.017 ) { // last updated longer than 12h ago
+            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
 
             let allVolunteers = (await strapi.config['nrk'].getAllEmployees())
               ?.filter(emp => emp.statusCode != 'H' && emp.statusCode != 'Z' && emp.statusCode != 'FSJ');
@@ -154,8 +154,8 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                   if(volunteer.mnr == 87100) {
                     strapi.log.debug('maria funcs');
                     strapi.log.debug(JSON.stringify(activityAreas));
-                    const funcs = await strapi.config['nrk'].getUnits(volunteer.mnr);
-                    strapi.log.debug(JSON.stringify(funcs));
+                    // const funcs = await strapi.config['nrk'].getUnits(volunteer.mnr);
+                    // strapi.log.debug(JSON.stringify(funcs));
                   }
 
                   // if(volunteer.mnr == 9117) {
