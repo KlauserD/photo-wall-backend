@@ -14,7 +14,7 @@ const declaredRealms = [
   },
   {
     name: 'EAR',
-    activityAreas: ['ZE/ER']
+    activityAreas: ['EaRK', 'EaRA']
   },
   {
     name: 'TÖT',
@@ -111,9 +111,10 @@ async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
       });
   } else {
     if(realmData.volunteers.length > 0) {
-      await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
-        data: realmData
-      });
+
+      // await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
+      //   data: realmData
+      // });
     }
   }
 
