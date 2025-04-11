@@ -115,6 +115,20 @@ module.exports = {
     //     return data;
     // },
 
+    async getNextEmployeeDuties(mnr) {
+        const data = await makeNrkRequest({
+            'req': 'GET_NEXT_DIENSTE',
+            'mnr': mnr,
+            'anzahl': 10
+        });
+
+        strapi.log.debug('duties for ' + mnr + ': ' + JSON.stringify(data));
+
+        if(data == null) return null;
+
+        return data;
+    },
+
     async getPictureByMnr(mnr) {
         const resultString = await makeNrkRequest({
             'req': 'MAPicture',

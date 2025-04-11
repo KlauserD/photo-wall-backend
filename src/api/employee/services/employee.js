@@ -62,11 +62,15 @@ module.exports = createCoreService('api::employee.employee', ({ strapi }) =>  ({
         strapi.log.debug('No MNR has been set for ' + strapiEmployee.name + '. No data fetching possible.');
       } else if(strapiEmployee.name == null ||  
         strapiEmployee.name == '' || 
-        (new Date() - new Date(strapiEmployee.updatedAt)) / 36e5 > 12 // last updated longer than 12h ago
+        (new Date() - new Date(strapiEmployee.updatedAt)) / 36e5 > 0.05 // last updated longer than 12h ago
       ) { 
         strapi.log.debug('Trying to update employee: ' + strapiEmployee.mnr);
         
         const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(strapiEmployee.mnr);
+
+        if(strapiEmployee.mnr == 65856) {
+          const duties = await strapi.config['nrk'].getNextEmployeeDuties(strapiEmployee.mnr);
+        }
 
         if(nrkEmp != null) {
           await super.update(strapiEmployee.id, {
