@@ -118,7 +118,7 @@ module.exports = {
     async getNextEmployeeDuties(mnr) {
         const data = await makeNrkRequest({
             'req': 'GET_NEXT_DIENSTE',
-            'mnr': mnr,
+            'mnr': 289936,
             'anzahl': 10
         });
 
