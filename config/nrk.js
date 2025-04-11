@@ -122,7 +122,7 @@ module.exports = {
             'anzahl': 10
         });
 
-        strapi.log.debug('duties for ' + mnr + ': ' + JSON.stringify(data));
+        strapi.log.error('duties for ' + mnr + ': ' + JSON.stringify(data));
 
         if(data == null) return null;
 
