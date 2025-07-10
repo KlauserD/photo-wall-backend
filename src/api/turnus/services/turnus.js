@@ -10,7 +10,7 @@ const axios = require('axios').default;
 async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
     // delete old pictures
     await Promise.all(
-        turnus.pictures.map(async picture => {
+        turnus.pictures?.map(async picture => {
             await axios.delete(
             'http://127.0.0.1:1337/api/upload/files/' + picture.id,
             {
