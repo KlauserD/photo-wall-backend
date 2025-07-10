@@ -52,6 +52,8 @@ module.exports = {
             return {
                 mnr: nrkObject.Personalnr,
                 name: nrkObject.Vorname + ' ' + nrkObject.Nachname,
+                firstName: data.Vorname,
+                lastName: data.Nachname,
                 gender: nrkObject.Geschlecht,
                 department: nrkObject["Dienststelle Name"] == 'St. Leonhard-Ruprechtshofen' ? 'St. Leonhard' : nrkObject["Dienststelle Name"],
                 beginDateString: nrkObject["Status von"],
