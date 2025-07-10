@@ -29,7 +29,7 @@ module.exports = {
 
         return {
             mnr: mnr,
-            name: data.Nachname + ' ' + data.Vorname,
+            name: data.Vorname + ' ' + data.Nachname,
             firstName: data.Vorname,
             lastName: data.Nachname,
             beginDateString: data["Status von"],
@@ -51,7 +51,7 @@ module.exports = {
         return data.map(nrkObject => {
             return {
                 mnr: nrkObject.Personalnr,
-                name: nrkObject.Vorname + ' ' + nrkObject.Nachname,
+                name: nrkObject.Nachname + ' ' + nrkObject.Vorname,
                 firstName: nrkObject.Vorname,
                 lastName: nrkObject.Nachname,
                 gender: nrkObject.Geschlecht,
