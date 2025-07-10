@@ -78,6 +78,11 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
 
     let strapiVolunteer = volunteerQueryResult.length > 0 ? volunteerQueryResult[0] : null;
 
+    if(nrkEmp.mnr == 87100) {
+      strapi.log.debug('maria data');
+      strapi.log.debug(JSON.stringify(nrkEmp));
+    }
+
     const volunteerData = {
         mnr: nrkEmp.mnr,
         name: nrkEmp.name,
