@@ -19,6 +19,8 @@ async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
                 '.' +
                 pictureBlob.type.split('/')[1];
     
+            
+            strapi.log.debug('turnus: ' + JSON.stringify(turnus));
 
             // delete if api image is present
             const existingApiPictures = turnus.pictures?.filter(picture => picture != null);
