@@ -44,10 +44,10 @@
     "gender": {
       "type": "string"
     },
-    "first_name": {
+    "firstname": {
       "type": "string"
     },
-    "last_name": {
+    "lastname": {
       "type": "string"
     }
   }
