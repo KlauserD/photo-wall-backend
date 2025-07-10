@@ -81,8 +81,8 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
     const volunteerData = {
         mnr: nrkEmp.mnr,
         name: nrkEmp.name,
-        first_name: nrk.firstName,
-        last_name: nrk.lastName,
+        first_name: nrkEmp.firstName,
+        last_name: nrkEmp.lastName,
         qualification: nrkEmp.qualification,
         gender: nrkEmp.gender,
         department: nrkEmp.department
