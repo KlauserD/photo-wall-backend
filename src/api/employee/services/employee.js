@@ -19,6 +19,11 @@ function removeUmlauts(str) {
 }
 
 async function updatePicture(employee, fileBlob, filename) {
+
+  if(employee.mnr == 301465) {
+    strapi.log.debug('Bugl foto: ', employee.picture);
+  }
+
   // delete if api image is present
   if(employee.picture?.name == filename) {
     await axios.delete(
