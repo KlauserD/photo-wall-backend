@@ -8,7 +8,21 @@ const { createCoreService } = require('@strapi/strapi').factories;
 const axios = require('axios').default;
 
 async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
+    // delete old pictures
+    await Promise.all(
+        turnus.pictures.map(async picture => {
+            await axios.delete(
+            'http://127.0.0.1:1337/api/upload/files/' + existingApiPictures[0].id,
+            {
+                headers: {
+                "Authorization": 'Bearer ' + strapiInstance.config['api'].uploadToken
+                }
+            }
+            );
+        })
+    )
 
+    // get pictures from NRK Server
     await Promise.all(
         nrkEmps.map(async nrkEmp => {
             const pictureBlob = await strapiInstance.config['nrk'].getPictureByMnr(nrkEmp.mnr);
@@ -19,27 +33,12 @@ async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
                 '.' +
                 pictureBlob.type.split('/')[1];
     
-            
-            strapi.log.debug('turnus: ' + JSON.stringify(turnus));
-
-            // delete if api image is present
-            const existingApiPictures = turnus.pictures?.filter(picture => picture != null);
-            if(existingApiPictures?.length > 0) {
-                await axios.delete(
-                'http://127.0.0.1:1337/api/upload/files/' + existingApiPictures[0].id,
-                {
-                    headers: {
-                    "Authorization": 'Bearer ' + strapiInstance.config['api'].uploadToken
-                    }
-                }
-                );
-            }
-    
             nrkEmp.pictureBlob = pictureBlob;
             nrkEmp.pictureFilename = filename;
         })
     );
 
+    // store pictures
     const form = new FormData();
     nrkEmps.forEach(nrkEmp => {
         form.append('files', nrkEmp.pictureBlob, nrkEmp.pictureFilename);
