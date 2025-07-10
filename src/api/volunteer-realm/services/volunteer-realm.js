@@ -78,10 +78,10 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
 
     let strapiVolunteer = volunteerQueryResult.length > 0 ? volunteerQueryResult[0] : null;
 
-    if(nrkEmp.mnr == 87100) {
-      strapi.log.debug('maria data');
-      strapi.log.debug(JSON.stringify(nrkEmp));
-    }
+    // if(nrkEmp.mnr == 87100) {
+    //   strapi.log.debug('maria data');
+    //   strapi.log.debug(JSON.stringify(nrkEmp));
+    // }
 
     const volunteerData = {
         mnr: nrkEmp.mnr,
@@ -108,8 +108,8 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
 }
 
 async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
-  strapi.log.debug('realm data: ' + JSON.stringify(realmData));
-  strapi.log.debug('existing realm: ' + JSON.stringify(existingRealm));
+  // strapi.log.debug('realm data: ' + JSON.stringify(realmData));
+  // strapi.log.debug('existing realm: ' + JSON.stringify(existingRealm));
 
   if(existingRealm == null) {
     existingRealm = await strapiInstance.service('api::volunteer-realm.volunteer-realm').create({
@@ -132,7 +132,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         // Calling the default core controller
         const { results: strapiRealms, pagination } = await super.find(...args);
 
-        strapi.log.debug(JSON.stringify(pagination))
+        // strapi.log.debug(JSON.stringify(pagination))
 
         let latestRealm;
         strapiRealms.forEach(realm => {
@@ -146,7 +146,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         // const allVolunteers = allEmps.filter(emp => emp.statusCode == 'E');
 
         if(latestRealm == null ||
-            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 0.03 ) { // last updated longer than 12h ago
+            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
 
             let allVolunteers = (await strapi.config['nrk'].getAllEmployees())
               ?.filter(emp => emp.statusCode != 'H' && emp.statusCode != 'Z' && emp.statusCode != 'FSJ');
@@ -158,12 +158,10 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                 allVolunteers.map(async volunteer => {
                   const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
 
-                  if(volunteer.mnr == 87100) {
-                    strapi.log.debug('maria funcs');
-                    strapi.log.debug(JSON.stringify(activityAreas));
-                    // const funcs = await strapi.config['nrk'].getUnits(volunteer.mnr);
-                    // strapi.log.debug(JSON.stringify(funcs));
-                  }
+                  // if(volunteer.mnr == 87100) {
+                  //   strapi.log.debug('maria funcs');
+                  //   strapi.log.debug(JSON.stringify(activityAreas));
+                  // }
 
                   // if(volunteer.mnr == 9117) {
                   //   strapi.log.debug(volunteer.name);
