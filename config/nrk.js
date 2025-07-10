@@ -29,7 +29,7 @@ module.exports = {
 
         return {
             mnr: mnr,
-            name: data.Vorname + ' ' + data.Nachname,
+            name: data.Nachname + ' ' + data.Vorname,
             firstName: data.Vorname,
             lastName: data.Nachname,
             beginDateString: data["Status von"],
