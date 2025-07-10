@@ -81,6 +81,8 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
     const volunteerData = {
         mnr: nrkEmp.mnr,
         name: nrkEmp.name,
+        first_name: nrk.firstName,
+        last_name: nrk.lastName,
         qualification: nrkEmp.qualification,
         gender: nrkEmp.gender,
         department: nrkEmp.department
@@ -139,7 +141,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         // const allVolunteers = allEmps.filter(emp => emp.statusCode == 'E');
 
         if(latestRealm == null ||
-            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
+            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 0.03 ) { // last updated longer than 12h ago
 
             let allVolunteers = (await strapi.config['nrk'].getAllEmployees())
               ?.filter(emp => emp.statusCode != 'H' && emp.statusCode != 'Z' && emp.statusCode != 'FSJ');
