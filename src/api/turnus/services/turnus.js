@@ -21,7 +21,7 @@ async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
     
 
             // delete if api image is present
-            const existingApiPictures = turnus.pictures?.filter(picture => picture.name == filename);
+            const existingApiPictures = turnus.pictures?.filter(picture => picture != null);
             if(existingApiPictures?.length > 0) {
                 await axios.delete(
                 'http://127.0.0.1:1337/api/upload/files/' + existingApiPictures[0].id,
@@ -77,7 +77,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
         });
               
        if(latestTurnus == null ||
-        (new Date() - new Date(latestTurnus.updatedAt)) / 36e5 > 12) { // last updated longer than 12h ago
+        (new Date() - new Date(latestTurnus.updatedAt)) / 36e5 > 0.03) { // last updated longer than 12h ago
             let membersGroupedByTurnus = {};
             /* 
                 {
