@@ -19,13 +19,8 @@ function removeUmlauts(str) {
 }
 
 async function updatePicture(employee, fileBlob, filename) {
-
-  if(employee.mnr == 301465) {
-    strapi.log.debug('Bugl foto: ', employee.picture);
-  }
-
   // delete if api image is present
-  if(employee.picture?.name == filename) {
+  if(employee.picture != null) {
     await axios.delete(
       'http://127.0.0.1:1337/api/upload/files/' + employee.picture.id,
       {

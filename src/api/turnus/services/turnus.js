@@ -21,7 +21,7 @@ async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
     
 
             // delete if api image is present
-            const existingApiPictures = turnus.pictures?.filter(picture => picture.name == filename);
+            const existingApiPictures = turnus.pictures?.filter(picture => picture != null);
             if(existingApiPictures?.length > 0) {
                 await axios.delete(
                 'http://127.0.0.1:1337/api/upload/files/' + existingApiPictures[0].id,
