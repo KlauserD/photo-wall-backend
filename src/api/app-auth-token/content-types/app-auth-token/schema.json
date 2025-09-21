@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "app_auth_tokens",
+  "info": {
+    "singularName": "app-auth-token",
+    "pluralName": "app-auth-tokens",
+    "displayName": "AppAuthToken",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "token": {
+      "type": "string"
+    },
+    "password": {
+      "type": "password"
+    },
+    "auth_start_time": {
+      "type": "datetime"
+    }
+  }
+}

@@ -68,10 +68,6 @@ module.exports = createCoreService('api::employee.employee', ({ strapi }) =>  ({
         
         const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(strapiEmployee.mnr);
 
-        if(strapiEmployee.mnr == 65856) {
-          const duties = await strapi.config['nrk'].getNextEmployeeDuties(strapiEmployee.mnr);
-        }
-
         if(nrkEmp != null) {
           await super.update(strapiEmployee.id, {
             data: {

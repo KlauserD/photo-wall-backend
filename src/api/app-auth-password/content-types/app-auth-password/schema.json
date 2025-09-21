@@ -1,0 +1,19 @@
+{
+  "kind": "singleType",
+  "collectionName": "app_auth_passwords",
+  "info": {
+    "singularName": "app-auth-password",
+    "pluralName": "app-auth-passwords",
+    "displayName": "AppAuthPassword",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "password": {
+      "type": "string"
+    }
+  }
+}

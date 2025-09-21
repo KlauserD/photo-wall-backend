@@ -16,6 +16,7 @@
     "@strapi/plugin-users-permissions": "4.9.0",
     "@strapi/strapi": "4.9.0",
     "axios": "^1.6.7",
+    "bcrypt": "^6.0.0",
     "better-sqlite3": "8.0.1",
     "cross-env": "^7.0.3"
   },

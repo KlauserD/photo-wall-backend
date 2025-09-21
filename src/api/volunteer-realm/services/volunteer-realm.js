@@ -108,9 +108,6 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
 }
 
 async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
-  // strapi.log.debug('realm data: ' + JSON.stringify(realmData));
-  // strapi.log.debug('existing realm: ' + JSON.stringify(existingRealm));
-
   if(existingRealm == null) {
     existingRealm = await strapiInstance.service('api::volunteer-realm.volunteer-realm').create({
           data: realmData,
@@ -132,18 +129,12 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         // Calling the default core controller
         const { results: strapiRealms, pagination } = await super.find(...args);
 
-        // strapi.log.debug(JSON.stringify(pagination))
-
         let latestRealm;
         strapiRealms.forEach(realm => {
             if(latestRealm == null || (new Date(realm.updatedAt) > new Date(latestRealm.updatedAt))) {
                 latestRealm = realm;
             }
         });
-
-        // const allEmps = await strapi.config['nrk'].getAllEmployees();
-              
-        // const allVolunteers = allEmps.filter(emp => emp.statusCode == 'E');
 
         if(latestRealm == null ||
             (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
@@ -158,23 +149,9 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                 allVolunteers.map(async volunteer => {
                   const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
 
-                  // if(volunteer.mnr == 87100) {
-                  //   strapi.log.debug('maria funcs');
-                  //   strapi.log.debug(JSON.stringify(activityAreas));
-                  // }
-
-                  // if(volunteer.mnr == 9117) {
-                  //   strapi.log.debug(volunteer.name);
-                  //   const funcs = await strapi.config['nrk'].getUnits(volunteer.mnr);
-                  //   strapi.log.debug(JSON.stringify(funcs));
-                  // }
-
                   volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1)
                 })
               );
-
-
-              // strapi.log.debug(JSON.stringify(allVolunteers.filter(vol => vol.name == 'Alois Porsch')));
 
               const realms = [];
               declaredRealms.forEach(declaredRealm => {
@@ -224,9 +201,6 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
                 })
               );
 
-              // strapi.log.debug('realms: ' + JSON.stringify(realms));
-
-
               // add realms to strapi DB and relate to volunteers
               for (const realm of realms) {
                 const volunteerIds = realm.volunteers.map(volunteer => volunteer.strapiId);
@@ -249,27 +223,6 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
               }
 
               return await super.find(...args);
-
-              // await Promise.all(
-              //   realms.map(async realm => {
-              //     const realmData = {
-              //       name: realm.name,
-              //       volunteers: realm.volunteers.map(volunteer => volunteer.strapiId)
-              //     }
-
-              //     // find existing realm in DB
-              //     const volunteerRealmQueryResult = (await super.find({
-              //       filters: {
-              //           name: realm.name
-              //       },
-              //       populate: '*'
-              //     })).results;
-              //     let strapiRealm = volunteerRealmQueryResult.length > 0 ? volunteerRealmQueryResult[0] : null;
-
-              //     await createOrUpdateRealm(strapiRealm, realmData, strapi);
-              //   })
-              // );
-
             }
 
           }
