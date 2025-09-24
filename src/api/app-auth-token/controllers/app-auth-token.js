@@ -17,5 +17,8 @@ module.exports = createCoreController('api::app-auth-token.app-auth-token',
     },
     async checkAuthenticationStatus(ctx) {
         ctx.body = await strapi.service('api::app-auth-token.app-auth-token').checkAuthenticationStatus(ctx.request.params.token)
+    },
+    async getApiToken(ctx) {
+        ctx.body = await strapi.service('api::app-auth-token.app-auth-token').getApiToken(ctx.request.params.token)
     }
   }));

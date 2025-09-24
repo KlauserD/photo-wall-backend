@@ -14,6 +14,11 @@ module.exports = {
       method: 'GET',
       path: '/app-auth-token/checkAuthenticationStatus/:token', 
       handler: 'app-auth-token.checkAuthenticationStatus',
+    },
+    {
+      method: 'GET',
+      path: '/app-auth-token/getApiToken/:token', 
+      handler: 'app-auth-token.getApiToken',
     }
   ]
 }
