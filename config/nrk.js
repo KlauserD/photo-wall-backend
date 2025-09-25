@@ -145,7 +145,7 @@ module.exports = {
     }
 }
 
-async function imageStringToBlob(imageString) {
+function imageStringToBlob(imageString) {
     if (imageString == null) return null;
 
     const resultStringSplitted = imageString.split(',');
