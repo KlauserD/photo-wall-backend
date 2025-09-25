@@ -124,7 +124,7 @@ async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
   return existingRealm;
 }
 
-async function updateAllVolunteerRealms() {
+async function updateAllVolunteerRealms(strapiInstance) {
   let allVolunteers = (await strapi.config['nrk'].getAllEmployees())
     ?.filter(emp => emp.statusCode != 'H' && emp.statusCode != 'Z' && emp.statusCode != 'FSJ');
 
@@ -136,7 +136,7 @@ async function updateAllVolunteerRealms() {
 
     for (let i = 0; i < allVolunteers.length; i++) {
       const volunteer = allVolunteers[i];
-      
+
       strapi.log.debug('Fetch Activity area of ' + volunteer.mnr);
 
       const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
@@ -211,12 +211,20 @@ async function updateAllVolunteerRealms() {
       }
 
       // find existing realm in DB
-      const volunteerRealmQueryResult = (await super.find({
-        filters: {
+      const volunteerRealmQueryResult = (await strapiInstance.service('api::volunteer-realm.volunteer-realm').find({
+          filters: {
             name: realm.name
-        },
-        populate: 'volunteers'
+          },
+          populate: 'volunteers'
       })).results;
+
+      // const volunteerRealmQueryResult = (await super.find({
+      //   filters: {
+      //       name: realm.name
+      //   },
+      //   populate: 'volunteers'
+      // })).results;
+
       let strapiRealm = volunteerRealmQueryResult.length > 0 ? volunteerRealmQueryResult[0] : null;
 
       const updatedRealm = await createOrUpdateRealm(strapiRealm, realmData, strapi);
@@ -239,7 +247,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         if(latestRealm == null ||
             (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
 
-            updateAllVolunteerRealms();
+            updateAllVolunteerRealms(strapi);
             // return await super.find(...args);
           }
 
