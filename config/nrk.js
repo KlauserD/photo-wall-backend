@@ -44,8 +44,8 @@ module.exports = {
             'withpic': 1
         });
 
-        //strapi.log.debug('all ma: ');
-        //strapi.log.debug(JSON.stringify(data));
+        strapi.log.debug('all ma: ');
+        strapi.log.debug(JSON.stringify(data));
 
         if(data == null) return null;
 
