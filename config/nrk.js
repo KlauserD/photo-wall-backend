@@ -44,8 +44,8 @@ module.exports = {
             'withpic': 1
         });
 
-        strapi.log.debug('all ma: ');
-        strapi.log.debug(JSON.stringify(data));
+        // strapi.log.debug('all ma: ');
+        // strapi.log.debug(JSON.stringify(data));
 
         if(data == null) return null;
 
@@ -58,7 +58,8 @@ module.exports = {
                 gender: nrkObject.Geschlecht,
                 department: nrkObject["Dienststelle Name"] == 'St. Leonhard-Ruprechtshofen' ? 'St. Leonhard' : nrkObject["Dienststelle Name"],
                 beginDateString: nrkObject["Status von"],
-                statusCode: nrkObject["Status Code"]
+                statusCode: nrkObject["Status Code"],
+                imageBlob: imageStringToBlob(nrkObject["PersonalFoto"])
             }
         });
     },
@@ -140,16 +141,20 @@ module.exports = {
             'mnr': mnr
         });
 
-        if (resultString == null) return null;
-
-        const resultStringSplitted = resultString.split(',');
-
-        const mimeString = resultStringSplitted[0].split(':')[1].split(';')[0]
-        const imgBase64 = resultStringSplitted[1];
-
-        const buffer = Buffer.from(imgBase64, 'base64');
-        return new Blob([buffer], { type: mimeString });
+        return imageStringToBlob(resultString);
     }
+}
+
+async function imageStringToBlob(imageString) {
+    if (resultString == null) return null;
+
+    const resultStringSplitted = resultString.split(',');
+
+    const mimeString = resultStringSplitted[0].split(':')[1].split(';')[0]
+    const imgBase64 = resultStringSplitted[1];
+
+    const buffer = Buffer.from(imgBase64, 'base64');
+    return new Blob([buffer], { type: mimeString });
 }
 
 async function makeNrkRequest(params) {
