@@ -146,9 +146,9 @@ module.exports = {
 }
 
 async function imageStringToBlob(imageString) {
-    if (resultString == null) return null;
+    if (imageString == null) return null;
 
-    const resultStringSplitted = resultString.split(',');
+    const resultStringSplitted = imageString.split(',');
 
     const mimeString = resultStringSplitted[0].split(':')[1].split(';')[0]
     const imgBase64 = resultStringSplitted[1];
