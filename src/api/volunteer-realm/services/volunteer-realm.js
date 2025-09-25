@@ -178,7 +178,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
               // add all volunteers to strapi DB
               // synchronous delayed loop to not overload NRK server
               for (let i = 0; i < distinctVolunteers.length; i++) {
-                nrkVolunteer = distinctVolunteers[i];
+                const nrkVolunteer = distinctVolunteers[i];
 
                 strapi.log.debug('Persist volunteer ' + nrkVolunteer.mnr);
                 
