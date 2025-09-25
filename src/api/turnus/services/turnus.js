@@ -115,20 +115,39 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
 
 
             if(memberMnrs != null) {
-                await Promise.all(
-                    memberMnrs.map(async mnr => {
-                        const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
+                for (let i = 0; i < memberMnrs.length; i++) {
+                    const mnr = memberMnrs[i];
+                    
+                    strapi.log.debug('Fetching ZDL ' + mnr);
+                    const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
+
+                    
+                    if(nrkEmp != null && nrkEmp.statusCode != null) {
+                        const beginDateSplitted = nrkEmp.beginDateString.split('-'); // "2024-01-02"
+                        const selector = parseInt(beginDateSplitted[0]) + '/' + parseInt(beginDateSplitted[1]); // 2024/1
+    
+                        if(membersGroupedByTurnus[selector] == null) membersGroupedByTurnus[selector] = [];
+                        membersGroupedByTurnus[selector].push(nrkEmp);
+                    }
+
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+
+                // await Promise.all(
+                //     memberMnrs.map(async mnr => {
+                //         strapi.log.debug('Fetching ZDL ' + mnr);
+                //         const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
     
                         
-                        if(nrkEmp != null && nrkEmp.statusCode != null) {
-                            const beginDateSplitted = nrkEmp.beginDateString.split('-'); // "2024-01-02"
-                            const selector = parseInt(beginDateSplitted[0]) + '/' + parseInt(beginDateSplitted[1]); // 2024/1
+                //         if(nrkEmp != null && nrkEmp.statusCode != null) {
+                //             const beginDateSplitted = nrkEmp.beginDateString.split('-'); // "2024-01-02"
+                //             const selector = parseInt(beginDateSplitted[0]) + '/' + parseInt(beginDateSplitted[1]); // 2024/1
         
-                            if(membersGroupedByTurnus[selector] == null) membersGroupedByTurnus[selector] = [];
-                            membersGroupedByTurnus[selector].push(nrkEmp);
-                        }
-                    })
-                );
+                //             if(membersGroupedByTurnus[selector] == null) membersGroupedByTurnus[selector] = [];
+                //             membersGroupedByTurnus[selector].push(nrkEmp);
+                //         }
+                //     })
+                // );
 
                 //strapi.log.debug(JSON.stringify(membersGroupedByTurnus));
 

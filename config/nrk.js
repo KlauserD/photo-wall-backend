@@ -40,7 +40,8 @@ module.exports = {
     async getAllEmployees() {
         let data = await makeNrkRequest({
             'req': 'GetAllMA',
-            'withguests': 0
+            'withguests': 0,
+            'withpic': 1
         });
 
         //strapi.log.debug('all ma: ');
