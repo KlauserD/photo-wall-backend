@@ -80,7 +80,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
         });
               
        if(latestTurnus == null ||
-        (new Date() - new Date(latestTurnus.updatedAt)) / 36e5 > 12) { // last updated longer than 12h ago
+        (new Date() - new Date(latestTurnus.updatedAt)) / 36e5 > 0.05) { // last updated longer than 12h ago
             let membersGroupedByTurnus = {};
             /* 
                 {
@@ -118,91 +118,79 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
                 for (let i = 0; i < memberMnrs.length; i++) {
                     const mnr = memberMnrs[i];
                     
-                    strapi.log.debug('Fetching ZDL ' + mnr);
-                    const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
+                    if(mnr == 317098) {
 
-                    
-                    if(nrkEmp != null && nrkEmp.statusCode != null) {
-                        const beginDateSplitted = nrkEmp.beginDateString.split('-'); // "2024-01-02"
-                        const selector = parseInt(beginDateSplitted[0]) + '/' + parseInt(beginDateSplitted[1]); // 2024/1
-    
-                        if(membersGroupedByTurnus[selector] == null) membersGroupedByTurnus[selector] = [];
-                        membersGroupedByTurnus[selector].push(nrkEmp);
+
+                        strapi.log.debug('Fetching ZDL ' + mnr);
+                        const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
+
+                        
+                        if(nrkEmp != null && nrkEmp.statusCode != null) {
+                            const beginDateSplitted = nrkEmp.beginDateString.split('-'); // "2024-01-02"
+                            const selector = parseInt(beginDateSplitted[0]) + '/' + parseInt(beginDateSplitted[1]); // 2024/1
+        
+                            if(membersGroupedByTurnus[selector] == null) membersGroupedByTurnus[selector] = [];
+                            membersGroupedByTurnus[selector].push(nrkEmp);
+                        }
+
                     }
+
 
                     await new Promise(resolve => setTimeout(resolve, 1000));
                 }
 
                 // await Promise.all(
-                //     memberMnrs.map(async mnr => {
-                //         strapi.log.debug('Fetching ZDL ' + mnr);
-                //         const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(mnr);
+                //     strapiTurnuses.map(async turnus => {
+                //         if(!membersGroupedByTurnus.hasOwnProperty(turnus.year + '/' + turnus.month)) {
+                //             // set turnus inactive
+                //             strapi.log.debug('setting turnus ' + turnus.year + '/' + turnus.month + ' inactive');
     
-                        
-                //         if(nrkEmp != null && nrkEmp.statusCode != null) {
-                //             const beginDateSplitted = nrkEmp.beginDateString.split('-'); // "2024-01-02"
-                //             const selector = parseInt(beginDateSplitted[0]) + '/' + parseInt(beginDateSplitted[1]); // 2024/1
-        
-                //             if(membersGroupedByTurnus[selector] == null) membersGroupedByTurnus[selector] = [];
-                //             membersGroupedByTurnus[selector].push(nrkEmp);
+                //             await super.update(turnus.id, {
+                //                 data: {
+                //                   active: false
+                //                 },
+                //             });
                 //         }
                 //     })
                 // );
 
-                //strapi.log.debug(JSON.stringify(membersGroupedByTurnus));
+                // for (const turnusKey in membersGroupedByTurnus) {
+                //     if (Object.hasOwnProperty.call(membersGroupedByTurnus, turnusKey)) {
+                //         const turnusKeySplitted = turnusKey.split('/');
+                //         const turnusYear = turnusKeySplitted[0];
+                //         const turnusMonth = turnusKeySplitted[1];
 
-                await Promise.all(
-                    strapiTurnuses.map(async turnus => {
-                        if(!membersGroupedByTurnus.hasOwnProperty(turnus.year + '/' + turnus.month)) {
-                            // set turnus inactive
-                            strapi.log.debug('setting turnus ' + turnus.year + '/' + turnus.month + ' inactive');
-    
-                            await super.update(turnus.id, {
-                                data: {
-                                  active: false
-                                },
-                            });
-                        }
-                    })
-                );
+                //         /* make sure turnus entry exists in strapi */
+                //         const turnusQueryResult = (await super.find({
+                //             filters: {
+                //                 year: turnusYear,
+                //                 month: turnusMonth
+                //             },
+                //             populate: '*'
+                //         })).results;
 
-                for (const turnusKey in membersGroupedByTurnus) {
-                    if (Object.hasOwnProperty.call(membersGroupedByTurnus, turnusKey)) {
-                        const turnusKeySplitted = turnusKey.split('/');
-                        const turnusYear = turnusKeySplitted[0];
-                        const turnusMonth = turnusKeySplitted[1];
+                //         let strapiTurnus = turnusQueryResult.length > 0 ? turnusQueryResult[0] : null;
+                //         if(strapiTurnus == null) {
+                //             strapiTurnus = await super.create({
+                //                 data: {
+                //                     year: turnusYear,
+                //                     month: turnusMonth,
+                //                     active: true
+                //                 },
+                //                 populate: '*'
+                //             });
+                //         }
 
-                        /* make sure turnus entry exists in strapi */
-                        const turnusQueryResult = (await super.find({
-                            filters: {
-                                year: turnusYear,
-                                month: turnusMonth
-                            },
-                            populate: '*'
-                        })).results;
+                //         // empty pictures before adding new ones
+                //         await super.update(strapiTurnus.id, {
+                //             data: {
+                //               pictures: null,
+                //             },
+                //         });
 
-                        let strapiTurnus = turnusQueryResult.length > 0 ? turnusQueryResult[0] : null;
-                        if(strapiTurnus == null) {
-                            strapiTurnus = await super.create({
-                                data: {
-                                    year: turnusYear,
-                                    month: turnusMonth,
-                                    active: true
-                                },
-                                populate: '*'
-                            });
-                        }
-
-                        // empty pictures before adding new ones
-                        await super.update(strapiTurnus.id, {
-                            data: {
-                              pictures: null,
-                            },
-                        });
-
-                        await updateTurnusPictures(strapiTurnus, membersGroupedByTurnus[turnusKey], strapi)
-                    }
-                }
+                //         await updateTurnusPictures(strapiTurnus, membersGroupedByTurnus[turnusKey], strapi)
+                //     }
+                // }
             }
         }
 

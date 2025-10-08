@@ -20,10 +20,7 @@ module.exports = {
             'mnr': mnr
         });
 
-        // if(mnr == 87100) {
-
-        //     strapi.log.debug('nrk emp for id ' + mnr + ': ' + JSON.stringify(data));
-        // }
+        strapi.log.debug('nrk emp for id ' + mnr + ': ' + JSON.stringify(data));
 
         if(data == null) return null;
 
