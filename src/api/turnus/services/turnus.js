@@ -115,11 +115,18 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
 
             if(allZdlFsj != null) {
                 allZdlFsj.forEach(nrkZdlFsj => {
-                    const beginDateSplitted = nrkZdlFsj.beginDateString.split('-'); // "2024-01-02"
-                    const selector = parseInt(beginDateSplitted[0]) + '/' + parseInt(beginDateSplitted[1]); // 2024/1
+                    const beginDate = new Date(nrkZdlFsj.beginDateString);
+                    const today = new Date();
+                    const lastOfCurrentMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                    
+                    // only ZDL/FSJ which are active with current month and not later in the future
+                    if(beginDate <= lastOfCurrentMonth) {
+                        const beginDateSplitted = nrkZdlFsj.beginDateString.split('-'); // "2024-01-02"
+                        const selector = parseInt(beginDateSplitted[0]) + '/' + parseInt(beginDateSplitted[1]); // 2024/1
 
-                    if(membersGroupedByTurnus[selector] == null) membersGroupedByTurnus[selector] = [];
-                    membersGroupedByTurnus[selector].push(nrkZdlFsj);
+                        if(membersGroupedByTurnus[selector] == null) membersGroupedByTurnus[selector] = [];
+                        membersGroupedByTurnus[selector].push(nrkZdlFsj);
+                    }
                 });
 
                 await Promise.all(
