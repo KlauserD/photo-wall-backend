@@ -42,7 +42,7 @@ async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
         nrkEmp.pictureFilename = filename;
 
         // synchronous delayed loop to not overload NRK server
-      await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 10000));
     }
 
     // await Promise.all(
