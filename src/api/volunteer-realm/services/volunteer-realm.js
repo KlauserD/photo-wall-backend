@@ -248,7 +248,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         });
 
         if(latestRealm == null ||
-            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 0.05 ) { // last updated longer than 12h ago
+            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
 
             updateAllVolunteerRealms(strapi);
             // return await super.find(...args);
