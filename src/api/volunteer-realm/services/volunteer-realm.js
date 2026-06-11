@@ -198,7 +198,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
       }
 
     // synchronous delayed loop to not overload NRK server
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
     // add realms to strapi DB and relate to volunteers
@@ -245,7 +245,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         });
 
         if(latestRealm == null ||
-            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
+            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 0.05 ) { // last updated longer than 12h ago
 
             updateAllVolunteerRealms(strapi);
             // return await super.find(...args);
