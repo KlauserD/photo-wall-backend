@@ -67,7 +67,7 @@ module.exports = createCoreService('api::employee.employee', ({ strapi }) =>  ({
         strapi.log.debug('Trying to update employee: ' + strapiEmployee.mnr);
         
 
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 5000));
         const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(strapiEmployee.mnr);
 
         if(nrkEmp != null) {
@@ -77,7 +77,7 @@ module.exports = createCoreService('api::employee.employee', ({ strapi }) =>  ({
             },
           });
 
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          await new Promise(resolve => setTimeout(resolve, 5000));
           const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiEmployee.mnr);
 
           if(pictureBlob != null) {

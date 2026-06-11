@@ -8,6 +8,8 @@ const { createCoreService } = require('@strapi/strapi').factories;
 const axios = require('axios').default;
 
 async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
+  await new Promise(resolve => setTimeout(resolve, 30000));
+
     // delete old pictures
     if(turnus.pictures != null) {
         await Promise.all(

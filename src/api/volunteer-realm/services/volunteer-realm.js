@@ -126,7 +126,7 @@ async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
 
 async function updateAllVolunteerRealms(strapiInstance) {
   // adaption for request rate of 60 per minute
-  await new Promise(resolve => setTimeout(resolve, 30000));
+  await new Promise(resolve => setTimeout(resolve, 60000));
 
   let allVolunteers = (await strapi.config['nrk'].getAllEmployees())
     ?.filter(emp => emp.statusCode != 'H' && emp.statusCode != 'Z' && emp.statusCode != 'FSJ');
@@ -146,7 +146,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
       volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1);
       
       // synchronous delayed loop to not overload NRK server
-      await new Promise(resolve => setTimeout(resolve, 1100));
+      await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
     const realms = [];
@@ -201,7 +201,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
       }
 
     // synchronous delayed loop to not overload NRK server
-      await new Promise(resolve => setTimeout(resolve, 1100));
+      await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
     // add realms to strapi DB and relate to volunteers
