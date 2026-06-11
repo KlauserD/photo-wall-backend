@@ -143,7 +143,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
       volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1);
       
       // synchronous delayed loop to not overload NRK server
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 2000));
     }
 
     const realms = [];
@@ -198,7 +198,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
       }
 
     // synchronous delayed loop to not overload NRK server
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, 2000));
     }
 
     // add realms to strapi DB and relate to volunteers
