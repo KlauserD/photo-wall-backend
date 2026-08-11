@@ -131,23 +131,23 @@ async function updateAllVolunteerRealms(strapiInstance) {
   strapi.log.debug(JSON.stringify(allVolunteers.map(emp => emp.mnr)));
 
   if(allVolunteers != null) {
-    // await Promise.all(
-    //   allVolunteers.map(async volunteer => {
-    //     strapi.log.debug('Fetch Activity area of ' + volunteer.mnr);
+    await Promise.all(
+      allVolunteers.map(async volunteer => {
+        strapi.log.debug('Fetch Activity area of ' + volunteer.mnr);
 
-    //     const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
-    //     volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1);
-    //   })
-    // )
+        const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
+        volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1);
+      })
+    )
 
-    for (let i = 0; i < allVolunteers.length; i++) {
-      const volunteer = allVolunteers[i];
+    // for (let i = 0; i < allVolunteers.length; i++) {
+    //   const volunteer = allVolunteers[i];
 
-      strapi.log.debug('Fetch Activity area of ' + volunteer.mnr);
+    //   strapi.log.debug('Fetch Activity area of ' + volunteer.mnr);
 
-      const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
-      volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1);
-    }
+    //   const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
+    //   volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1);
+    // }
 
     const realms = [];
     declaredRealms.forEach(declaredRealm => {
@@ -236,7 +236,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         });
 
         if(latestRealm == null ||
-            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 0.05 ) { // last updated longer than 12h ago
+            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
 
             updateAllVolunteerRealms(strapi);
           }
