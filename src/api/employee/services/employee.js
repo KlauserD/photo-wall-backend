@@ -62,12 +62,12 @@ module.exports = createCoreService('api::employee.employee', ({ strapi }) =>  ({
         strapi.log.debug('No MNR has been set for ' + strapiEmployee.name + '. No data fetching possible.');
       } else if(strapiEmployee.name == null ||  
         strapiEmployee.name == '' || 
-        (new Date() - new Date(strapiEmployee.updatedAt)) / 36e5 > 12 // last updated longer than 12h ago
+        (new Date() - new Date(strapiEmployee.updatedAt)) / 36e5 > 0.05 // last updated longer than 12h ago
       ) { 
         strapi.log.debug('Trying to update employee: ' + strapiEmployee.mnr);
         
 
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        // await new Promise(resolve => setTimeout(resolve, 5000));
         const nrkEmp = await strapi.config['nrk'].getEmployeeByMnr(strapiEmployee.mnr);
 
         if(nrkEmp != null) {
@@ -77,7 +77,7 @@ module.exports = createCoreService('api::employee.employee', ({ strapi }) =>  ({
             },
           });
 
-          await new Promise(resolve => setTimeout(resolve, 5000));
+          // await new Promise(resolve => setTimeout(resolve, 5000));
           const pictureBlob = await strapi.config['nrk'].getPictureByMnr(strapiEmployee.mnr);
 
           if(pictureBlob != null) {

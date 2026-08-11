@@ -8,7 +8,7 @@ const { createCoreService } = require('@strapi/strapi').factories;
 const axios = require('axios').default;
 
 async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
-  await new Promise(resolve => setTimeout(resolve, 30000));
+//   await new Promise(resolve => setTimeout(resolve, 30000));
 
     // delete old pictures
     if(turnus.pictures != null) {
@@ -26,6 +26,7 @@ async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
         )
     }
 
+    // TODO: async loop again
     // get pictures from NRK Server
     for (let i = 0; i < nrkEmps.length; i++) {
         const nrkEmp = nrkEmps[i];
@@ -44,7 +45,7 @@ async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
         nrkEmp.pictureFilename = filename;
 
         // synchronous delayed loop to not overload NRK server
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        // await new Promise(resolve => setTimeout(resolve, 5000));
     }
 
     // await Promise.all(
@@ -102,7 +103,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
         });
               
        if(latestTurnus == null ||
-        (new Date() - new Date(latestTurnus.updatedAt)) / 36e5 > 12) { // last updated longer than 12h ago
+        (new Date() - new Date(latestTurnus.updatedAt)) / 36e5 > 0.05) { // last updated longer than 12h ago
             let membersGroupedByTurnus = {};
             /* 
                 {

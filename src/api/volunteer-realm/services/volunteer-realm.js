@@ -126,7 +126,7 @@ async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
 
 async function updateAllVolunteerRealms(strapiInstance) {
   // adaption for request rate of 60 per minute
-  await new Promise(resolve => setTimeout(resolve, 60000));
+  // await new Promise(resolve => setTimeout(resolve, 60000));
 
   let allVolunteers = (await strapi.config['nrk'].getAllEmployees())
     ?.filter(emp => emp.statusCode != 'H' && emp.statusCode != 'Z' && emp.statusCode != 'FSJ');
@@ -134,6 +134,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
   // strapi.log.debug(JSON.stringify(allVolunteers));
 
   if(allVolunteers != null) {
+    // TODO: async loop again
     // await Promise.all(
       // allVolunteers.map(async volunteer => {
 
@@ -146,7 +147,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
       volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1);
       
       // synchronous delayed loop to not overload NRK server
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
     const realms = [];
@@ -171,6 +172,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
     distinctVolunteers = distinctVolunteers.filter((item, index) => distinctVolunteers.indexOf(item) === index);
     strapi.log.debug('length after distinct: ' + distinctVolunteers.length);
 
+    // TODO: async loop again
     // add all volunteers to strapi DB
     // synchronous delayed loop to not overload NRK server
     for (let i = 0; i < distinctVolunteers.length; i++) {
@@ -201,7 +203,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
       }
 
     // synchronous delayed loop to not overload NRK server
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
     // add realms to strapi DB and relate to volunteers
@@ -248,7 +250,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         });
 
         if(latestRealm == null ||
-            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
+            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 0.05 ) { // last updated longer than 12h ago
 
             updateAllVolunteerRealms(strapi);
             // return await super.find(...args);

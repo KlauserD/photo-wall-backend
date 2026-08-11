@@ -18,6 +18,7 @@
     "axios": "^1.6.7",
     "bcrypt": "^6.0.0",
     "better-sqlite3": "8.0.1",
+    "bottleneck": "^2.19.5",
     "cross-env": "^7.0.3"
   },
   "author": {

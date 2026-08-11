@@ -4,6 +4,16 @@ const environment = {
     apiToken: 'XYescCVxf3auqJKWxJxvER4wqCRustwnzDboJMw8chUouomZqK'
 };
 
+const axios = require('axios').default;
+const Bottleneck = require('bottleneck');
+
+const limiter = new Bottleneck({
+    reservoir: 60,
+    reservoirRefreshAmount: 60,
+    reservoirRefreshInterval: 60 * 1000,
+    maxConcurrent: 1
+});
+
 module.exports = {
     async getFilterMembers(filterId) {
         const members = await makeNrkRequest({
@@ -155,29 +165,38 @@ function imageStringToBlob(imageString) {
 }
 
 async function makeNrkRequest(params) {
-    const axios = require('axios').default;
+    return limiter.schedule(async () => {
+        try {
+            strapi.log.debug("Limited NRK Request");
 
-    const axiosResponse = await axios.post(
-        environment.nrkServer, 
-        params, {
-            timeout: 15000,
-            headers: {
-                'NRK-AUTH': environment.apiToken,
-                'Content-Type': 'application/json'
+            const axiosResponse = await axios.post(
+                environment.nrkServer, 
+                params, {
+                    timeout: 15000,
+                    headers: {
+                        'NRK-AUTH': environment.apiToken,
+                        'Content-Type': 'application/json'
+                    }
+            });
+
+            if(axiosResponse.status >= 200 && axiosResponse.status < 300) {
+                if(axiosResponse.data.status === "OK" || axiosResponse.data.status === "NODATA") {
+                    return axiosResponse.data.data;
+                } else {
+                    strapi.log.error(
+                        'fetch error. status: ' + 
+                        axiosResponse.data.status +
+                        ', msg: ' +
+                        axiosResponse.data.msg
+                    );
+                    return null;
+                }
             }
-    });
-    
-    if(axiosResponse.status >= 200 && axiosResponse.status < 300) {
-        if(axiosResponse.data.status === "OK" || axiosResponse.data.status === "NODATA") {
-            return axiosResponse.data.data;
-        } else {
-            strapi.log.error(
-                'fetch error. status: ' + 
-                axiosResponse.data.status +
-                ', msg: ' +
-                axiosResponse.data.msg
-            );
+
+            return null;
+        } catch (error) {
+            strapi.log.error('Request failed: ' + error.message);
             return null;
         }
-    }
+    });
 }
