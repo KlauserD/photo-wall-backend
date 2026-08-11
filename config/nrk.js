@@ -8,9 +8,7 @@ const axios = require('axios').default;
 const Bottleneck = require('bottleneck');
 
 const limiter = new Bottleneck({
-    reservoir: 60,
-    reservoirRefreshAmount: 60,
-    reservoirRefreshInterval: 60 * 1000,
+    minTime: 1000,
     maxConcurrent: 1
 });
 
