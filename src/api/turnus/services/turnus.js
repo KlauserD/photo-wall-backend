@@ -46,26 +46,26 @@ async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
     //     // await new Promise(resolve => setTimeout(resolve, 5000));
     // }
 
-    await Promise.all(
-        nrkEmps.map(async nrkEmp => {
-            strapi.log.debug('Fetch picture for ZDL/FSJ ' + nrkEmp.mnr);
-            const pictureBlob = await strapiInstance.config['nrk'].getPictureByMnr(nrkEmp.mnr);
+    // await Promise.all(
+    //     nrkEmps.map(async nrkEmp => {
+    //         strapi.log.debug('Fetch picture for ZDL/FSJ ' + nrkEmp.mnr);
+    //         const pictureBlob = await strapiInstance.config['nrk'].getPictureByMnr(nrkEmp.mnr);
     
-            const filename = 'api_' + 
-                (nrkEmp.statusCode == 'Z' ? 'ZD-' : 'FSJ-') +
-                nrkEmp.name +
-                '.' +
-                pictureBlob.type.split('/')[1];
+    //         const filename = 'api_' + 
+    //             (nrkEmp.statusCode == 'Z' ? 'ZD-' : 'FSJ-') +
+    //             nrkEmp.name +
+    //             '.' +
+    //             pictureBlob.type.split('/')[1];
     
-            nrkEmp.pictureBlob = pictureBlob;
-            nrkEmp.pictureFilename = filename;
-        })
-    );
+    //         nrkEmp.pictureBlob = pictureBlob;
+    //         nrkEmp.pictureFilename = filename;
+    //     })
+    // );
 
     // store pictures
     const form = new FormData();
     nrkEmps.forEach(nrkEmp => {
-        form.append('files', nrkEmp.pictureBlob, nrkEmp.pictureFilename);
+        form.append('files', nrkEmp.imageBlob, nrkEmp.pictureFilename);
     });
 
     form.append('ref', 'api::turnus.turnus');
@@ -102,7 +102,7 @@ module.exports = createCoreService('api::turnus.turnus', ({ strapi }) => ({
         });
               
        if(latestTurnus == null ||
-        (new Date() - new Date(latestTurnus.updatedAt)) / 36e5 > 12) { // last updated longer than 12h ago
+        (new Date() - new Date(latestTurnus.updatedAt)) / 36e5 > 0.05) { // last updated longer than 12h ago
             let membersGroupedByTurnus = {};
             /* 
                 {
