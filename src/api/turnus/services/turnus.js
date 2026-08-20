@@ -26,40 +26,41 @@ async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
 
     // TODO: async loop again
     // get pictures from NRK Server
-    for (let i = 0; i < nrkEmps.length; i++) {
-        const nrkEmp = nrkEmps[i];
+    // for (let i = 0; i < nrkEmps.length; i++) {
+    //     const nrkEmp = nrkEmps[i];
 
-        strapi.log.debug('Fetch picture for ZDL/FSJ ' + nrkEmp.mnr);
+    //     strapi.log.debug('Fetch picture for ZDL/FSJ ' + nrkEmp.mnr);
 
-        const pictureBlob = await strapiInstance.config['nrk'].getPictureByMnr(nrkEmp.mnr);
+    //     const pictureBlob = await strapiInstance.config['nrk'].getPictureByMnr(nrkEmp.mnr);
 
-        const filename = 'api_' + 
-            (nrkEmp.statusCode == 'Z' ? 'ZD-' : 'FSJ-') +
-            nrkEmp.name +
-            '.' +
-            pictureBlob.type.split('/')[1];
+    //     const filename = 'api_' + 
+    //         (nrkEmp.statusCode == 'Z' ? 'ZD-' : 'FSJ-') +
+    //         nrkEmp.name +
+    //         '.' +
+    //         pictureBlob.type.split('/')[1];
 
-        nrkEmp.pictureBlob = pictureBlob;
-        nrkEmp.pictureFilename = filename;
+    //     nrkEmp.pictureBlob = pictureBlob;
+    //     nrkEmp.pictureFilename = filename;
 
-        // synchronous delayed loop to not overload NRK server
-        // await new Promise(resolve => setTimeout(resolve, 5000));
-    }
+    //     // synchronous delayed loop to not overload NRK server
+    //     // await new Promise(resolve => setTimeout(resolve, 5000));
+    // }
 
-    // await Promise.all(
-    //     nrkEmps.map(async nrkEmp => {
-    //         const pictureBlob = await strapiInstance.config['nrk'].getPictureByMnr(nrkEmp.mnr);
+    await Promise.all(
+        nrkEmps.map(async nrkEmp => {
+            strapi.log.debug('Fetch picture for ZDL/FSJ ' + nrkEmp.mnr);
+            const pictureBlob = await strapiInstance.config['nrk'].getPictureByMnr(nrkEmp.mnr);
     
-    //         const filename = 'api_' + 
-    //             (nrkEmp.statusCode == 'Z' ? 'ZD-' : 'FSJ-') +
-    //             nrkEmp.name +
-    //             '.' +
-    //             pictureBlob.type.split('/')[1];
+            const filename = 'api_' + 
+                (nrkEmp.statusCode == 'Z' ? 'ZD-' : 'FSJ-') +
+                nrkEmp.name +
+                '.' +
+                pictureBlob.type.split('/')[1];
     
-    //         nrkEmp.pictureBlob = pictureBlob;
-    //         nrkEmp.pictureFilename = filename;
-    //     })
-    // );
+            nrkEmp.pictureBlob = pictureBlob;
+            nrkEmp.pictureFilename = filename;
+        })
+    );
 
     // store pictures
     const form = new FormData();
