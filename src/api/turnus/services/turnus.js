@@ -71,7 +71,7 @@ async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
                 '.' +
                 nrkEmp.imageBlob.type.split('/')[1];
 
-        form.append('files', nrkEmp.imageBlob, nrkEmp.pictureFilename);
+        form.append('files', nrkEmp.imageBlob, filename);
     });
 
     form.append('ref', 'api::turnus.turnus');
