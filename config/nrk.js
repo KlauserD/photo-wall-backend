@@ -166,7 +166,7 @@ async function makeNrkRequest(params) {
     return limiter.schedule(async () => {
         try {
             strapi.log.debug("Limited NRK Request");
-            strapi.log.debug(params);
+            strapi.log.debug(JSON.stringify(params));
 
             const axiosResponse = await axios.post(
                 environment.nrkServer, 
