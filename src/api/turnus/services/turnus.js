@@ -65,6 +65,12 @@ async function updateTurnusPictures(turnus, nrkEmps, strapiInstance) {
     // store pictures
     const form = new FormData();
     nrkEmps.forEach(nrkEmp => {
+        const filename = 'api_' + 
+                (nrkEmp.statusCode == 'Z' ? 'ZD-' : 'FSJ-') +
+                nrkEmp.name +
+                '.' +
+                nrkEmp.imageBlob.type.split('/')[1];
+
         form.append('files', nrkEmp.imageBlob, nrkEmp.pictureFilename);
     });
 
