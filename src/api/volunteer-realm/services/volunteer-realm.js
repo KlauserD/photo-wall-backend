@@ -130,6 +130,8 @@ async function updateAllVolunteerRealms(strapiInstance) {
   strapi.log.debug('allVolunteers: ');
   strapi.log.debug(JSON.stringify(allVolunteers.map(emp => emp.mnr)));
 
+  await strapi.config['nrk'].getAllActivityAreas();
+
   if(allVolunteers != null) {
     await Promise.all(
       allVolunteers.map(async volunteer => {
