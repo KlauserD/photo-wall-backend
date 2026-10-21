@@ -120,11 +120,9 @@ async function createOrUpdateRealm(existingRealms, realmData, strapiInstance) {
           populate: 'volunteers'
       });
   } else {
-    if(realmData.volunteers.length > 0) {
-      await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
-        data: realmData
-      });
-    }
+    await strapiInstance.service('api::volunteer-realm.volunteer-realm').update(existingRealm.id, {
+      data: realmData
+    });
   }
 
   return existingRealm;
