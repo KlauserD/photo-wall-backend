@@ -207,8 +207,8 @@ async function updateAllVolunteerRealms(strapiInstance, existingRealms) {
         volunteers: volunteerIds
       }
 
-      strapi.log.debug('find existing realms');
-
+      
+      // strapi.log.debug('find existing realms');
       // find existing realm in DB
       // const volunteerRealmQueryResult = (await strapiInstance.service('api::volunteer-realm.volunteer-realm').find({
       //     filters: {
@@ -219,11 +219,11 @@ async function updateAllVolunteerRealms(strapiInstance, existingRealms) {
 
       // let strapiRealm = volunteerRealmQueryResult.length > 0 ? volunteerRealmQueryResult[0] : null;
 
-      strapi.log.debug('existing realms');
-      strapi.log.debug(JSON.stringify(existingRealms));
+      // strapi.log.debug('existing realms');
+      // strapi.log.debug(JSON.stringify(existingRealms));
 
-      strapi.log.debug('realm data');
-      strapi.log.debug(JSON.stringify(realmData));
+      // strapi.log.debug('realm data');
+      // strapi.log.debug(JSON.stringify(realmData));
 
       const updatedRealm = await createOrUpdateRealm(existingRealms, realmData, strapi);
     }
@@ -245,7 +245,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         });
 
         if(!updatePromise && latestRealm == null ||
-            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 0.05 ) { // last updated longer than 12h ago
+            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
 
               updatePromise = updateAllVolunteerRealms(strapi, strapiRealms)
                 .catch(error => strapi.log.error('Background update failed: ', error))
