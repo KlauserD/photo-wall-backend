@@ -128,7 +128,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
     ?.filter(emp => emp.statusCode != 'H' && emp.statusCode != 'Z' && emp.statusCode != 'FSJ');
 
   strapi.log.debug('allVolunteers: ');
-  strapi.log.debug(JSON.stringify(allVolunteers));
+  // strapi.log.debug(JSON.stringify(allVolunteers));
 
   const allActiveActivityAreas = (await strapi.config['nrk'].getAllActivityAreas())?.filter(area => area.aktiv == 1);
 
