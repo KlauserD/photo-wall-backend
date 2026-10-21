@@ -114,8 +114,8 @@ async function createOrUpdateRealm(existingRealms, realmData, strapiInstance) {
     existingRealm = filteredRealms[0];
   }
 
-  strapi.log.debug('REALM: ');
-  strapi.log.debug(JSON.stringify(existingRealm));
+  // strapi.log.debug('REALM: ');
+  // strapi.log.debug(JSON.stringify(existingRealm));
 
   if(existingRealm == null) {
     existingRealm = await strapiInstance.service('api::volunteer-realm.volunteer-realm').create({
@@ -143,23 +143,9 @@ async function updateAllVolunteerRealms(strapiInstance, existingRealms) {
   if(allVolunteers != null && allActiveActivityAreas != null) {
     await Promise.all(
       allVolunteers.map(async volunteer => {
-        // strapi.log.debug('Fetch Activity area of ' + volunteer.mnr);
-
         volunteer.activityAreas = allActiveActivityAreas.filter(area => area.mnr === volunteer.mnr);
-
-        // const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
-        // volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1);
       })
     )
-
-    // for (let i = 0; i < allVolunteers.length; i++) {
-    //   const volunteer = allVolunteers[i];
-
-    //   strapi.log.debug('Fetch Activity area of ' + volunteer.mnr);
-
-    //   const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
-    //   volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1);
-    // }
 
     const realms = [];
     declaredRealms.forEach(declaredRealm => {
@@ -171,7 +157,6 @@ async function updateAllVolunteerRealms(strapiInstance, existingRealms) {
     realms.forEach(realm => {
       allVolunteers.forEach(volunteer => {
         if(volunteer.activityAreas.some(volunteerArea => realm.activityAreas.includes(volunteerArea['TB_ID']))) {
-          // strapi.log.debug('pushing volunteer ' + volunteer.name + ' to ' + realm.name);
           realm.volunteers.push(volunteer);
         }
       });
@@ -183,33 +168,33 @@ async function updateAllVolunteerRealms(strapiInstance, existingRealms) {
     distinctVolunteers = distinctVolunteers.filter((item, index) => distinctVolunteers.indexOf(item) === index);
     strapi.log.debug('length after distinct: ' + distinctVolunteers.length);
 
-    // await Promise.all(
-    //   distinctVolunteers.map(async nrkVolunteer => {
-    //     // strapi.log.debug('Persist volunteer ' + nrkVolunteer.mnr);
+    await Promise.all(
+      distinctVolunteers.map(async nrkVolunteer => {
+        // strapi.log.debug('Persist volunteer ' + nrkVolunteer.mnr);
         
-    //     nrkVolunteer.qualification = await strapi.config['nrk'].getEmployeeQualificationByMnr(nrkVolunteer.mnr)
+        nrkVolunteer.qualification = await strapi.config['nrk'].getEmployeeQualificationByMnr(nrkVolunteer.mnr)
 
-    //     if(nrkVolunteer.qualification != null && ['m', 'w'].includes(nrkVolunteer.gender)) {
-    //       nrkVolunteer.qualification = nrkVolunteer.qualification.replace(
-    //         ':in',
-    //         nrkVolunteer.gender == 'm' ? '' : 'in'
-    //       );
-    //     }
+        if(nrkVolunteer.qualification != null && ['m', 'w'].includes(nrkVolunteer.gender)) {
+          nrkVolunteer.qualification = nrkVolunteer.qualification.replace(
+            ':in',
+            nrkVolunteer.gender == 'm' ? '' : 'in'
+          );
+        }
 
-    //     const strapiVolunteer = await createOrUpdateVolunteer(nrkVolunteer, strapi);
-    //     nrkVolunteer.strapiId = strapiVolunteer.id;
+        const strapiVolunteer = await createOrUpdateVolunteer(nrkVolunteer, strapi);
+        nrkVolunteer.strapiId = strapiVolunteer.id;
 
-    //     if(nrkVolunteer.imageBlob != null) {
-    //         // strapi.log.debug('Update picture for: ' + nrkVolunteer.mnr);
+        if(nrkVolunteer.imageBlob != null) {
+            // strapi.log.debug('Update picture for: ' + nrkVolunteer.mnr);
 
-    //         await updatePicture(
-    //           strapiVolunteer,
-    //           nrkVolunteer.imageBlob,
-    //           'api_' + removeUmlauts(nrkVolunteer.name) + "." + nrkVolunteer.imageBlob.type.split('/')[1]
-    //         );
-    //     }
-    //   })
-    // )
+            await updatePicture(
+              strapiVolunteer,
+              nrkVolunteer.imageBlob,
+              'api_' + removeUmlauts(nrkVolunteer.name) + "." + nrkVolunteer.imageBlob.type.split('/')[1]
+            );
+        }
+      })
+    )
 
     // add realms to strapi DB and relate to volunteers
     for (const realm of realms) {
