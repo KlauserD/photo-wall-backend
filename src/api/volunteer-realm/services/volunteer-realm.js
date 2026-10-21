@@ -106,8 +106,15 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
     return strapiVolunteer;
 }
 
-async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
-  if(existingRealm == null || existingRealm == undefined) {
+async function createOrUpdateRealm(existingRealms, realmData, strapiInstance) {
+  let existingRealm = null;
+
+  let filteredRealms = existingRealms.filter(realm => realm.name === realmData.name);
+  if(filteredRealms.length > 0 ) {
+    existingRealm = filteredRealms[0];
+  }
+
+  if(existingRealm == null) {
     existingRealm = await strapiInstance.service('api::volunteer-realm.volunteer-realm').create({
           data: realmData,
           populate: 'volunteers'
@@ -224,9 +231,13 @@ async function updateAllVolunteerRealms(strapiInstance, existingRealms) {
 
       // let strapiRealm = volunteerRealmQueryResult.length > 0 ? volunteerRealmQueryResult[0] : null;
 
+      strapi.log.debug('existing realms');
       strapi.log.debug(JSON.stringify(existingRealms));
 
-      const updatedRealm = await createOrUpdateRealm(strapiRealm, realmData, strapi);
+      strapi.log.debug('realm data');
+      strapi.log.debug(JSON.stringify(realmData));
+
+      const updatedRealm = await createOrUpdateRealm(existingRealms, realmData, strapi);
     }
   }
 }
