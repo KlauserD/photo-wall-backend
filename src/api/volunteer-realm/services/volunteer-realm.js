@@ -130,7 +130,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
   strapi.log.debug('allVolunteers: ');
   strapi.log.debug(JSON.stringify(allVolunteers.map(emp => emp.mnr)));
 
-  const allActiveActivityAreas = await strapi.config['nrk'].getAllActivityAreas().filter(area => area.aktiv == 1);
+  const allActiveActivityAreas = (await strapi.config['nrk'].getAllActivityAreas())?.filter(area => area.aktiv == 1);
 
   if(allVolunteers != null && allActivityAreas != null) {
     await Promise.all(
