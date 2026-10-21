@@ -130,15 +130,17 @@ async function updateAllVolunteerRealms(strapiInstance) {
   strapi.log.debug('allVolunteers: ');
   strapi.log.debug(JSON.stringify(allVolunteers.map(emp => emp.mnr)));
 
-  await strapi.config['nrk'].getAllActivityAreas();
+  const allActiveActivityAreas = await strapi.config['nrk'].getAllActivityAreas().filter(area => area.aktiv == 1);
 
-  if(allVolunteers != null) {
+  if(allVolunteers != null && allActivityAreas != null) {
     await Promise.all(
       allVolunteers.map(async volunteer => {
         strapi.log.debug('Fetch Activity area of ' + volunteer.mnr);
 
-        const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
-        volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1);
+        volunteer.activityAreas = allActiveActivityAreas.filter(area => area.mnr === volunteer.mnr);
+
+        // const activityAreas = await strapi.config['nrk'].getEmployeeActivityAreaByMnr(volunteer.mnr);
+        // volunteer.activityAreas = activityAreas == null ? [] : activityAreas.filter(area => area.aktiv == 1);
       })
     )
 

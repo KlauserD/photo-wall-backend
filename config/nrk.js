@@ -74,24 +74,10 @@ module.exports = {
             'req': 'GetAllMATBereiche'
         });
 
-        strapi.log.debug('all activity areas: ');
-        strapi.log.debug(JSON.stringify(data));
+        // strapi.log.debug('all activity areas: ');
+        // strapi.log.debug(JSON.stringify(data));
 
-        if(data == null) return null;
-
-        // return data.map(nrkObject => {
-        //     return {
-        //         mnr: nrkObject.Personalnr,
-        //         name: nrkObject.Nachname + ' ' + nrkObject.Vorname,
-        //         firstName: nrkObject.Vorname,
-        //         lastName: nrkObject.Nachname,
-        //         gender: nrkObject.Geschlecht,
-        //         department: nrkObject["Dienststelle Name"] == 'St. Leonhard-Ruprechtshofen' ? 'St. Leonhard' : nrkObject["Dienststelle Name"],
-        //         beginDateString: nrkObject["Status von"],
-        //         statusCode: nrkObject["Status Code"],
-        //         imageBlob: imageStringToBlob(nrkObject["PersonalFoto"])
-        //     }
-        // });
+        return data;
     },
 
     async getEmployeeQualificationByMnr(mnr) {
