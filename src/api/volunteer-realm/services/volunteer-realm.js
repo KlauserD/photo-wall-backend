@@ -127,7 +127,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
   let allVolunteers = (await strapi.config['nrk'].getAllEmployees())
     ?.filter(emp => emp.statusCode != 'H' && emp.statusCode != 'Z' && emp.statusCode != 'FSJ');
 
-  strapi.log.debug('allVolunteers: ');
+  // strapi.log.debug('allVolunteers: ');
   // strapi.log.debug(JSON.stringify(allVolunteers));
 
   const allActiveActivityAreas = (await strapi.config['nrk'].getAllActivityAreas())?.filter(area => area.aktiv == 1);
@@ -135,7 +135,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
   if(allVolunteers != null && allActiveActivityAreas != null) {
     await Promise.all(
       allVolunteers.map(async volunteer => {
-        strapi.log.debug('Fetch Activity area of ' + volunteer.mnr);
+        // strapi.log.debug('Fetch Activity area of ' + volunteer.mnr);
 
         volunteer.activityAreas = allActiveActivityAreas.filter(area => area.mnr === volunteer.mnr);
 
@@ -177,7 +177,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
 
     await Promise.all(
       distinctVolunteers.map(async nrkVolunteer => {
-        strapi.log.debug('Persist volunteer ' + nrkVolunteer.mnr);
+        // strapi.log.debug('Persist volunteer ' + nrkVolunteer.mnr);
         
         nrkVolunteer.qualification = await strapi.config['nrk'].getEmployeeQualificationByMnr(nrkVolunteer.mnr)
 
@@ -192,7 +192,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
         nrkVolunteer.strapiId = strapiVolunteer.id;
 
         if(nrkVolunteer.imageBlob != null) {
-            strapi.log.debug('Update picture for: ' + nrkVolunteer.mnr);
+            // strapi.log.debug('Update picture for: ' + nrkVolunteer.mnr);
 
             await updatePicture(
               strapiVolunteer,
