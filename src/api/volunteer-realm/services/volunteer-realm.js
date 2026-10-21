@@ -7,6 +7,8 @@
 const { createCoreService } = require('@strapi/strapi').factories;
 const axios = require('axios').default;
 
+let updatePromise = null;
+
 const declaredRealms = [
   {
     name: 'RKT',
@@ -242,11 +244,15 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
             }
         });
 
-        if(latestRealm == null ||
-            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
+        if(!updatePromise && latestRealm == null ||
+            (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 0.05 ) { // last updated longer than 12h ago
 
-            updateAllVolunteerRealms(strapi, strapiRealms);
-          }
+              updatePromise = updateAllVolunteerRealms(strapi, strapiRealms)
+                .catch(error => strapi.log.error('Background update failed: ', error))
+                .finally(() => {
+                  updatePromise = null;
+                });
+        }
 
         return { results: strapiRealms, pagination };
     }
