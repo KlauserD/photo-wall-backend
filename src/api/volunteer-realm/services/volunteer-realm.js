@@ -175,7 +175,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
     distinctVolunteers = distinctVolunteers.filter((item, index) => distinctVolunteers.indexOf(item) === index);
     strapi.log.debug('length after distinct: ' + distinctVolunteers.length);
 
-    Promise.all(
+    await Promise.all(
       distinctVolunteers.map(async nrkVolunteer => {
         strapi.log.debug('Persist volunteer ' + nrkVolunteer.mnr);
         
@@ -232,6 +232,8 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         // Calling the default core controller
         const { results: strapiRealms, pagination } = await super.find(...args);
 
+        strapi.log.debug('FIND IS CALLED');
+
         let latestRealm;
         strapiRealms.forEach(realm => {
             if(latestRealm == null || (new Date(realm.updatedAt) > new Date(latestRealm.updatedAt))) {
@@ -242,7 +244,7 @@ module.exports = createCoreService('api::volunteer-realm.volunteer-realm', ({ st
         if(latestRealm == null ||
             (new Date() - new Date(latestRealm.updatedAt)) / 36e5 > 12 ) { // last updated longer than 12h ago
 
-            updateAllVolunteerRealms(strapi);
+            await updateAllVolunteerRealms(strapi);
           }
 
         return { results: strapiRealms, pagination };
