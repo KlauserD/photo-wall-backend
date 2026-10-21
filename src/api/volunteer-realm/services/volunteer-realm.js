@@ -107,7 +107,7 @@ async function createOrUpdateVolunteer(nrkEmp, strapiInstance) {
 }
 
 async function createOrUpdateRealm(existingRealm, realmData, strapiInstance) {
-  if(existingRealm == null) {
+  if(existingRealm == null || existingRealm == undefined) {
     existingRealm = await strapiInstance.service('api::volunteer-realm.volunteer-realm').create({
           data: realmData,
           populate: 'volunteers'
@@ -128,7 +128,7 @@ async function updateAllVolunteerRealms(strapiInstance) {
     ?.filter(emp => emp.statusCode != 'H' && emp.statusCode != 'Z' && emp.statusCode != 'FSJ');
 
   strapi.log.debug('allVolunteers: ');
-  strapi.log.debug(JSON.stringify(allVolunteers.map(emp => emp.mnr)));
+  strapi.log.debug(JSON.stringify(allVolunteers));
 
   const allActiveActivityAreas = (await strapi.config['nrk'].getAllActivityAreas())?.filter(area => area.aktiv == 1);
 
